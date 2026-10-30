@@ -17,7 +17,7 @@ export function precoDoItem(s: Servico, tipo: TipoVeiculo, comCera: boolean) {
   const p = s.precos.find((x) => x.tipoVeiculo === tipo);
   if (!p) return null;
   const preco = comCera ? p.precoComCera : p.preco;
-  return preco === null ? null : { preco, minutos: s.tempoEstimadoMin };
+  return preco == null ? null : { preco, minutos: s.tempoEstimadoMin };
 }
 
 export function resumo(servicos: Servico[], itens: ItemEscolhido[], tipo: TipoVeiculo) {
@@ -36,7 +36,6 @@ export function resumo(servicos: Servico[], itens: ItemEscolhido[], tipo: TipoVe
 
 type Props = { tipo: TipoVeiculo; itens: ItemEscolhido[]; onMudar: (itens: ItemEscolhido[]) => void; onContinuar: () => void; onVoltar: () => void };
 
-/** Passo 2: serviços com preço e duração do tipo do veículo; o dono pode corrigir o preço (a API registra no log). */
 export function PassoServicos({ tipo, itens, onMudar, onContinuar, onVoltar }: Props) {
   const consulta = useQuery({ queryKey: ['servicos'], queryFn: listarServicos });
   const [erro, setErro] = useState<string | null>(null);

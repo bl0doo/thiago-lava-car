@@ -65,10 +65,6 @@ function Avaliacao({ nota, pendente, onAvaliar }: { nota: number | null | undefi
   );
 }
 
-/**
- * Detalhe do cartão (`/dono/os/:id`): serviços, pertences, valores e as ações do ciclo da OS
- * (iniciar, encerrar, desfazer, entregar, cancelar e avaliar). O pagamento entra na próxima etapa.
- */
 export function DetalheOS() {
   const { id } = useParams();
   const osId = Number(id);
@@ -155,7 +151,7 @@ export function DetalheOS() {
         <Secao titulo="Carro">
           <div className="flex flex-wrap items-center justify-between gap-sm">
             <Placa placa={os.placa} />
-            <SeloStatus status={os.status as never} />
+            <SeloStatus status={os.status} />
           </div>
           {os.cliente ? <p className="texto-corpo-g">{os.cliente}</p> : null}
           {os.telefone ? <p className="texto-corpo-p text-secundario">{os.telefone}</p> : null}

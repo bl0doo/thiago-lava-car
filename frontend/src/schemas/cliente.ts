@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { canalSchema, emailOpcionalSchema, nomeSchema, telefoneSchema } from './comuns';
 
-/** Espelha o validator de POST /clientes (Entrega 2): telefone com DDD e LGPD obrigatório. */
+/** Espelha o validator de POST /clientes: telefone com DDD e LGPD obrigatório. */
 export const clienteSchema = z.object({
   nome: nomeSchema,
   telefone: telefoneSchema,

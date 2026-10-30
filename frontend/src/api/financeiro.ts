@@ -1,15 +1,14 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
 export const CATEGORIAS_DESPESA = ['Insumos', 'Aluguel', 'Agua', 'Energia', 'Manutencao', 'Outros'] as const;
-export type CategoriaDespesa = (typeof CATEGORIAS_DESPESA)[number];
+export type Despesa = Schemas['DespesaResponse'];
+export type Despesas = Schemas['DespesasResponse'];
+export type DespesaEntrada = Schemas['SalvarDespesaRequest'];
 
-export type Despesa = { id: number; descricao: string; categoria: string; valor: number; data: string };
-export type Despesas = { itens: Despesa[]; total: number };
-export type DespesaEntrada = { descricao: string; categoria: string; valor: number; data: string };
-
-export type Retirada = { id: number; valor: number; data: string; observacao: string | null };
-export type Retiradas = { itens: Retirada[]; total: number };
-export type RetiradaEntrada = { valor: number; data: string; observacao: string | null };
+export type Retirada = Schemas['RetiradaResponse'];
+export type Retiradas = Schemas['RetiradasResponse'];
+export type RetiradaEntrada = Schemas['RegistrarRetiradaRequest'];
 
 /** `de` = primeiro dia do período (AAAA-MM-DD); sem `ate`, a API vai até o fim desse mês. */
 export async function listarDespesas(de: string): Promise<Despesas> {

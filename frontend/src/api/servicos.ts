@@ -1,20 +1,17 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 import type { TipoVeiculo } from './veiculos';
 
-export type PrecoServico = { tipoVeiculo: TipoVeiculo; preco: number; precoComCera: number | null };
+export type PrecoServico = Omit<Schemas['PrecoServicoDto'], 'tipoVeiculo'> & { tipoVeiculo: TipoVeiculo };
 
-export type Servico = { id: number; nome: string; categoria: string; tempoEstimadoMin: number; ativo: boolean; precos: PrecoServico[]; custoInsumos?: number };
+export type Servico = Omit<Schemas['ServicoResponse'], 'precos'> & { precos: PrecoServico[] };
 
 /** GET /servicos: catálogo. O dono também recebe o custo de insumos; o cliente, não. */
 export async function listarServicos(): Promise<Servico[]> {
   return (await api.get<Servico[]>('/servicos')).data;
 }
 
-export type ServicoEntrada = {
-  nome: string;
-  categoria: string;
-  tempoEstimadoMin: number;
-  custoInsumos: number;
+export type ServicoEntrada = Omit<Schemas['SalvarServicoRequest'], 'precos'> & {
   precos: PrecoServico[];
 };
 

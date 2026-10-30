@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import * as authApi from '@/api/auth';
 import { renovarSessao } from '@/api/client';
@@ -18,20 +17,8 @@ type AuthContextoValor = {
 const AuthContexto = createContext<AuthContextoValor | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const queryClient = useQueryClient();
   const { usuario } = useSyncExternalStore(sessao.assinar, sessao.obter);
   const [restaurando, setRestaurando] = useState(true);
-
-  useEffect(() => {
-    let usuarioId = sessao.obter().usuario?.id;
-    return sessao.assinar(() => {
-      const proximoId = sessao.obter().usuario?.id;
-      if (usuarioId !== proximoId) {
-        usuarioId = proximoId;
-        queryClient.clear();
-      }
-    });
-  }, [queryClient]);
 
   useEffect(() => {
     let ativo = true;

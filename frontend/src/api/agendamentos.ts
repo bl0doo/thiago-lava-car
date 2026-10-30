@@ -1,35 +1,17 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 import type { TipoVeiculo } from './veiculos';
 
 export type StatusAgendamento = 'Agendado' | 'Atendido' | 'Cancelado' | 'NaoCompareceu';
 
-export type Agendamento = {
-  id: number;
-  clienteId: number;
-  veiculoId: number;
-  placa: string;
-  servicoId: number;
-  servico: string;
-  comCera: boolean;
-  inicio: string;
-  duracaoEstimadaMin: number;
-  precoEstimado: number;
+export type Agendamento = Omit<Schemas['AgendamentoResponse'], 'status'> & {
   status: StatusAgendamento;
-  /** Só vem para o dono. */
-  cliente?: string | null;
 };
 
-export type AgendaDoDia = { data: string; agendamentos: Agendamento[] };
-export type Horarios = { preco: number; duracaoEstimadaMin: number; horarios: string[] };
-export type NovoAgendamento = { veiculoId: number; servicoId: number; comCera: boolean; inicio: string };
-export type AvariaCheckIn = { local: string; tipo: string; descricao: string };
-export type CheckIn = {
-  semAvarias: boolean;
-  avarias: AvariaCheckIn[];
-  pertencesEntrada: string | null;
-  nomeQuemRetira: string | null;
-  aceiteCliente: boolean;
-};
+export type AgendaDoDia = Omit<Schemas['AgendaDoDiaResponse'], 'agendamentos'> & { agendamentos: Agendamento[] };
+export type Horarios = Schemas['HorariosResponse'];
+export type NovoAgendamento = Schemas['CriarAgendamentoRequest'];
+export type CheckIn = Schemas['CheckInRequest'];
 
 /** GET /agendamentos?data= (dono): agenda do dia com todos os status. */
 export async function obterAgenda(data: string): Promise<AgendaDoDia> {
@@ -62,6 +44,6 @@ export async function marcarNaoCompareceu(id: number): Promise<Agendamento> {
 }
 
 /** POST /agendamentos/{id}/check-in (dono): vira uma OS em Aguardando com a vistoria. */
-export async function fazerCheckIn(id: number, dados: CheckIn): Promise<{ id: number }> {
-  return (await api.post<{ id: number }>(`/agendamentos/${id}/check-in`, dados)).data;
+export async function fazerCheckIn(id: number, dados: CheckIn): Promise<Schemas['OrdemCriadaResponse']> {
+  return (await api.post<Schemas['OrdemCriadaResponse']>(`/agendamentos/${id}/check-in`, dados)).data;
 }

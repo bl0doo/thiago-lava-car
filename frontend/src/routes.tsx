@@ -3,30 +3,7 @@ import { rotaInicial, useAuth } from '@/auth/AuthContext';
 import { RotaProtegida } from '@/auth/RotaProtegida';
 import { Carregando } from '@/components/ui/Carregando';
 import { ShellCliente, ShellDono, ShellLavador } from '@/components/layout/Shells';
-import { ClienteForm } from '@/pages/dono/ClienteForm';
-import { Agenda } from '@/pages/dono/Agenda';
-import { Caixa } from '@/pages/dono/Caixa';
-import { Configuracoes } from '@/pages/dono/Configuracoes';
-import { Clientes } from '@/pages/dono/Clientes';
-import { DetalheOS } from '@/pages/dono/DetalheOS';
-import { Despesas } from '@/pages/dono/Despesas';
-import { Equipe } from '@/pages/dono/Equipe';
-import { Mais } from '@/pages/dono/Mais';
-import { ServicoForm } from '@/pages/dono/ServicoForm';
-import { Servicos } from '@/pages/dono/Servicos';
-import { NovaEntrada } from '@/pages/dono/NovaEntrada';
-import { Agendar } from '@/pages/cliente/Agendar';
-import { MeusAgendamentos } from '@/pages/cliente/MeusAgendamentos';
-import { MeusDados } from '@/pages/cliente/MeusDados';
-import { MeusVeiculos } from '@/pages/cliente/MeusVeiculos';
-import { Painel } from '@/pages/dono/Painel';
-import { Relatorios } from '@/pages/dono/Relatorios';
 import { NaoEncontrada, SemPermissao } from '@/pages/Mensagens';
-import { FichaDoCarro } from '@/pages/FichaDoCarro';
-import { Cadastro } from '@/pages/publico/Cadastro';
-import { PertencesEncontrados } from '@/pages/lavador/PertencesEncontrados';
-import { Login } from '@/pages/publico/Login';
-import { LoginLavador } from '@/pages/publico/LoginLavador';
 
 function Inicio() {
   const { status, usuario } = useAuth();
@@ -34,12 +11,11 @@ function Inicio() {
   return <Navigate to={usuario ? rotaInicial(usuario.perfil) : '/login'} replace />;
 }
 
-/** Mapa de rotas da Entrega 2, seção 5. */
 export const rotas: RouteObject[] = [
   { path: '/', element: <Inicio /> },
-  { path: '/login', element: <Login /> },
-  { path: '/login/lavador', element: <LoginLavador /> },
-  { path: '/cadastro', element: <Cadastro /> },
+  { path: '/login', lazy: async () => ({ Component: (await import('@/pages/publico/Login')).Login }) },
+  { path: '/login/lavador', lazy: async () => ({ Component: (await import('@/pages/publico/LoginLavador')).LoginLavador }) },
+  { path: '/cadastro', lazy: async () => ({ Component: (await import('@/pages/publico/Cadastro')).Cadastro }) },
   { path: '/sem-permissao', element: <SemPermissao /> },
   {
     element: <RotaProtegida perfis={['Dono']} />,
@@ -48,24 +24,24 @@ export const rotas: RouteObject[] = [
         path: '/dono',
         element: <ShellDono />,
         children: [
-          { index: true, element: <Painel /> },
+          { index: true, lazy: async () => ({ Component: (await import('@/pages/dono/Painel')).Painel }) },
           { path: 'pit-stop', lazy: async () => ({ Component: (await import('@/pages/dono/PitStop')).PitStop }) },
-          { path: 'entrada', element: <NovaEntrada /> },
-          { path: 'os/:id', element: <DetalheOS /> },
-          { path: 'agenda', element: <Agenda /> },
-          { path: 'clientes', element: <Clientes /> },
-          { path: 'clientes/novo', element: <ClienteForm /> },
-          { path: 'clientes/:id', element: <ClienteForm /> },
-          { path: 'veiculos/:id', element: <FichaDoCarro /> },
-          { path: 'caixa', element: <Caixa /> },
-          { path: 'despesas', element: <Despesas /> },
-          { path: 'equipe', element: <Equipe /> },
-          { path: 'servicos', element: <Servicos /> },
-          { path: 'servicos/novo', element: <ServicoForm /> },
-          { path: 'servicos/:id', element: <ServicoForm /> },
-          { path: 'relatorios', element: <Relatorios /> },
-          { path: 'configuracoes', element: <Configuracoes /> },
-          { path: 'mais', element: <Mais /> },
+          { path: 'entrada', lazy: async () => ({ Component: (await import('@/pages/dono/NovaEntrada')).NovaEntrada }) },
+          { path: 'os/:id', lazy: async () => ({ Component: (await import('@/pages/dono/DetalheOS')).DetalheOS }) },
+          { path: 'agenda', lazy: async () => ({ Component: (await import('@/pages/dono/Agenda')).Agenda }) },
+          { path: 'clientes', lazy: async () => ({ Component: (await import('@/pages/dono/Clientes')).Clientes }) },
+          { path: 'clientes/novo', lazy: async () => ({ Component: (await import('@/pages/dono/ClienteForm')).ClienteForm }) },
+          { path: 'clientes/:id', lazy: async () => ({ Component: (await import('@/pages/dono/ClienteForm')).ClienteForm }) },
+          { path: 'veiculos/:id', lazy: async () => ({ Component: (await import('@/pages/FichaDoCarro')).FichaDoCarro }) },
+          { path: 'caixa', lazy: async () => ({ Component: (await import('@/pages/dono/Caixa')).Caixa }) },
+          { path: 'despesas', lazy: async () => ({ Component: (await import('@/pages/dono/Despesas')).Despesas }) },
+          { path: 'equipe', lazy: async () => ({ Component: (await import('@/pages/dono/Equipe')).Equipe }) },
+          { path: 'servicos', lazy: async () => ({ Component: (await import('@/pages/dono/Servicos')).Servicos }) },
+          { path: 'servicos/novo', lazy: async () => ({ Component: (await import('@/pages/dono/ServicoForm')).ServicoForm }) },
+          { path: 'servicos/:id', lazy: async () => ({ Component: (await import('@/pages/dono/ServicoForm')).ServicoForm }) },
+          { path: 'relatorios', lazy: async () => ({ Component: (await import('@/pages/dono/Relatorios')).Relatorios }) },
+          { path: 'configuracoes', lazy: async () => ({ Component: (await import('@/pages/dono/Configuracoes')).Configuracoes }) },
+          { path: 'mais', lazy: async () => ({ Component: (await import('@/pages/dono/Mais')).Mais }) },
         ],
       },
     ],
@@ -78,7 +54,7 @@ export const rotas: RouteObject[] = [
         element: <ShellLavador />,
         children: [
           { index: true, lazy: async () => ({ Component: (await import('@/pages/lavador/MinhaFila')).MinhaFila }) },
-          { path: 'os/:id', element: <PertencesEncontrados /> },
+          { path: 'os/:id', lazy: async () => ({ Component: (await import('@/pages/lavador/PertencesEncontrados')).PertencesEncontrados }) },
         ],
       },
     ],
@@ -90,11 +66,11 @@ export const rotas: RouteObject[] = [
         path: '/cliente',
         element: <ShellCliente />,
         children: [
-          { path: 'agendar', element: <Agendar /> },
-          { path: 'agendamentos', element: <MeusAgendamentos /> },
-          { path: 'veiculos', element: <MeusVeiculos /> },
-          { path: 'veiculos/:id', element: <FichaDoCarro /> },
-          { path: 'perfil', element: <MeusDados /> },
+          { path: 'agendar', lazy: async () => ({ Component: (await import('@/pages/cliente/Agendar')).Agendar }) },
+          { path: 'agendamentos', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusAgendamentos')).MeusAgendamentos }) },
+          { path: 'veiculos', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusVeiculos')).MeusVeiculos }) },
+          { path: 'veiculos/:id', lazy: async () => ({ Component: (await import('@/pages/FichaDoCarro')).FichaDoCarro }) },
+          { path: 'perfil', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusDados')).MeusDados }) },
         ],
       },
     ],

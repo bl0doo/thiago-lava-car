@@ -1,4 +1,5 @@
-import { loginSchema, pinSchema } from './login';
+import { pinSchema } from './comuns';
+import { loginSchema } from './login';
 
 describe('loginSchema', () => {
   it('aceita e-mail e senha', () => {

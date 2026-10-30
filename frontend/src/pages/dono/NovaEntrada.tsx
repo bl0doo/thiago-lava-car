@@ -15,7 +15,6 @@ import { PassoVistoria } from './entrada/PassoVistoria';
 
 const TITULOS = ['Veículo', 'Serviços', 'Vistoria'] as const;
 
-/** Nova entrada (telas 05 e cenários): placa → serviços → vistoria e aceite. Termina com o cartão em "Fila de largada". */
 export function NovaEntrada() {
   const navegar = useNavigate();
   const qc = useQueryClient();
@@ -38,6 +37,16 @@ export function NovaEntrada() {
     },
   });
 
+  function reiniciar() {
+    setPasso(0);
+    setVeiculo(null);
+    setDono('');
+    setItens([]);
+    setCriada(null);
+    setErro(null);
+    registrar.reset();
+  }
+
   if (criada && veiculo) {
     return (
       <section className="flex flex-col">
@@ -54,7 +63,7 @@ export function NovaEntrada() {
           <Link to="/dono/pit-stop" className={`${classesBotao('primario')} w-full`}>
             Ver no Pit Stop
           </Link>
-          <button type="button" className={`${classesBotao('contorno')} w-full`} onClick={() => window.location.assign('/dono/entrada')}>
+          <button type="button" className={`${classesBotao('contorno')} w-full`} onClick={reiniciar}>
             Registrar outro carro
           </button>
         </div>

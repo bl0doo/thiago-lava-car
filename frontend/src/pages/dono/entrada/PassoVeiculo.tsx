@@ -21,7 +21,6 @@ type Props = { onPronto: (v: Veiculo, nomeDono: string) => void };
 
 type Etapa = { tipo: 'placa' } | { tipo: 'novo'; placa: string };
 
-/** Passo 1: placa. Achou, mostra o dono; não achou, cadastra o veículo ali mesmo (cenários "placa encontrada, inválida, registrada"). */
 export function PassoVeiculo({ onPronto }: Props) {
   const [etapa, setEtapa] = useState<Etapa>({ tipo: 'placa' });
   const [texto, setTexto] = useState('');

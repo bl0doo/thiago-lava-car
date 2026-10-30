@@ -23,6 +23,7 @@ import { AreaTexto } from '@/components/ui/AreaTexto';
 import { Button } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { Select } from '@/components/ui/Select';
@@ -132,7 +133,6 @@ function FormRetirada({ onErro }: { onErro: (m: string | null) => void }) {
   );
 }
 
-/** Despesas da empresa e retiradas do dono (`/dono/despesas`): duas abas separadas, com total do mês. */
 export function Despesas() {
   const qc = useQueryClient();
   const [aba, setAba] = useState<Aba>('despesas');
@@ -195,12 +195,7 @@ export function Despesas() {
 
         {consulta.isPending ? <Carregando cartoes={2} /> : null}
         {consulta.isError ? (
-          <>
-            <Alerta>{interpretarErro(consulta.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void consulta.refetch()}>
-              Tentar de novo
-            </Button>
-          </>
+          <ErroConsulta erro={consulta.error} aoTentarNovamente={consulta.refetch} />
         ) : null}
 
         {total !== undefined ? (

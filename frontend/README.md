@@ -24,6 +24,8 @@ npm run dev        # http://localhost:5173, repassa /api para a API em localhost
 ```
 
 ## Scripts
-`npm run lint` · `npm run build` · `npm test` (Vitest) · `npm run e2e` (Playwright, celular; simula a API) · `npm run e2e:integracao` (Playwright contra a API e o banco reais) · `npm run api:types` (regenera `src/api/schema.d.ts` de `docs/api/openapi-v1.json`).
+`npm run lint` · `npm run build` · `npm test` (Vitest) · `npm run e2e` (Playwright, celular; simula a API) · `npm run e2e:integracao` (Playwright contra a API e o banco reais) · `npm run api:types` (regenera `src/api/schema.d.ts` de `docs/api/openapi-v1.json`) · `npm run api:types:check` (confere se os tipos gerados estão atualizados).
+
+Os módulos de `src/api` reutilizam os tipos gerados do OpenAPI. As telas são carregadas sob demanda nas rotas. `ConsultasDaSessao` mantém um cache de consultas por usuário, preservando-o durante a renovação do token e isolando respostas pendentes ao trocar de sessão.
 
 Sem o Chromium do Playwright instalado: `PW_CHROMIUM_PATH=/caminho/do/chrome npm run e2e`.

@@ -12,7 +12,6 @@ import { Placa } from '@/components/ui/Placa';
 
 const LIMITE = 500;
 
-/** Pertences encontrados no carro (tela do lavador): um campo de texto e o botão Salvar de 72 px. */
 export function PertencesEncontrados() {
   const { id } = useParams();
   const osId = Number(id);

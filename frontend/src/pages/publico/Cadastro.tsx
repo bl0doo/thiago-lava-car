@@ -15,7 +15,6 @@ import { cadastroSchema, type CadastroEntrada, type CadastroSaida } from '@/sche
 
 const CAMPOS_DA_API = ['nome', 'telefone', 'email', 'senha', 'canalPreferido', 'consentimentoLgpd'] as const;
 
-/** Cadastro do cliente (cenário "cadastro do cliente: padrão, erros, LGPD"): cria a conta e já entra na área do cliente. */
 export function Cadastro() {
   const { usuario } = useAuth();
   const navegar = useNavigate();

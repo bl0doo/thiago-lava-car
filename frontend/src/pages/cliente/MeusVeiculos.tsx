@@ -18,7 +18,6 @@ import { Select } from '@/components/ui/Select';
 import { TIPOS_VEICULO } from '@/schemas/comuns';
 import { meuVeiculoSchema, type MeuVeiculoEntrada, type MeuVeiculoSaida } from '@/schemas/meusDados';
 
-/** Meus veículos (cliente): lista com atalho para a Ficha do carro e cadastro de carro novo (cenário "cadastrar carro"). */
 export function MeusVeiculos() {
   const qc = useQueryClient();
   const consulta = useQuery({ queryKey: ['meus-veiculos'], queryFn: listarMeusVeiculos });

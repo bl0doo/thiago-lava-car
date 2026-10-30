@@ -21,10 +21,12 @@ import { Button } from '@/components/ui/Button';
 import { Caixinha } from '@/components/ui/Caixinha';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { formatarDataIso, formatarMoeda, hojeIso, lerValor } from '@/lib/format';
-import { editarMembroSchema, novoLavadorSchema, pinSchema } from '@/schemas/equipe';
+import { editarMembroSchema, novoLavadorSchema } from '@/schemas/equipe';
+import { pinSchema } from '@/schemas/comuns';
 
 type Acao =
   | { tipo: 'pin' | 'desativar' | 'editar'; lavador: Membro }
@@ -196,12 +198,7 @@ export function Equipe() {
           </div>
           {equipe.isPending ? <Carregando cartoes={1} /> : null}
           {equipe.isError ? (
-            <>
-              <Alerta>{interpretarErro(equipe.error).mensagem}</Alerta>
-              <Button variante="contorno" onClick={() => void equipe.refetch()}>
-                Tentar de novo
-              </Button>
-            </>
+            <ErroConsulta erro={equipe.error} aoTentarNovamente={equipe.refetch} />
           ) : null}
           {equipe.data?.length === 0 ? (
             <EstadoVazio Icone={Users} titulo="Nenhum lavador cadastrado">
@@ -278,12 +275,7 @@ export function Equipe() {
           <h2 className="texto-h2">Diárias de {formatarDataIso(`${mes}-01`).slice(3)}</h2>
           {diarias.isPending ? <Carregando cartoes={1} /> : null}
           {diarias.isError ? (
-            <>
-              <Alerta>{interpretarErro(diarias.error).mensagem}</Alerta>
-              <Button variante="contorno" onClick={() => void diarias.refetch()}>
-                Tentar de novo
-              </Button>
-            </>
+            <ErroConsulta erro={diarias.error} aoTentarNovamente={diarias.refetch} />
           ) : null}
           {diarias.data ? (
             <>

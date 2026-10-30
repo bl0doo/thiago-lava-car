@@ -36,8 +36,8 @@ export const ROTULO_FORMA: Record<(typeof FORMAS_PAGAMENTO)[number], string> = {
 export const valorSchema = (rotulo = 'valor') =>
   z
     .string()
-    .refine((v) => !Number.isNaN(lerValor(v)), `Informe o ${rotulo} em reais, como 12,50.`)
-    .refine((v) => Number.isNaN(lerValor(v)) || lerValor(v) > 0, 'O valor deve ser maior que zero.')
-    .transform(lerValor);
+    .transform(lerValor)
+    .refine((v) => !Number.isNaN(v), `Informe o ${rotulo} em reais, como 12,50.`)
+    .refine((v) => Number.isNaN(v) || v > 0, 'O valor deve ser maior que zero.');
 
 export const textoLivre = (max = 500) => z.string().trim().max(max, `Use até ${max} caracteres.`);

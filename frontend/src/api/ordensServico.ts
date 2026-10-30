@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { Cartao, Quadro } from './tipos';
+import type { Cartao, Quadro, Schemas } from './tipos';
 
 export async function obterQuadro(data?: string): Promise<Quadro> {
   const { data: quadro } = await api.get<Quadro>('/ordens-servico/quadro', { params: data ? { data } : undefined });
@@ -18,52 +18,19 @@ export async function desfazerUltimoPasso(id: number): Promise<Cartao> {
   return (await api.post<Cartao>(`/ordens-servico/${id}/desfazer`)).data;
 }
 
-export type AvariaEntrada = { local: string; tipo: string; descricao: string };
+export type EntradaOS = Schemas['RegistrarEntradaRequest'];
 
-export type EntradaOS = {
-  veiculoId: number;
-  itens: { servicoId: number; comCera: boolean; precoManual: number | null }[];
-  semAvarias: boolean;
-  avarias: AvariaEntrada[];
-  pertencesEntrada: string | null;
-  nomeQuemRetira: string | null;
-  aceiteCliente: boolean;
-};
-
-export type OSCriada = { id: number; status: string; valorTotal: number; duracaoEstimadaMin: number; previsaoConclusao: string };
+export type OSCriada = Schemas['OrdemCriadaResponse'];
 
 /** POST /ordens-servico: registra a entrada do carro com a vistoria (o cartão entra em Aguardando). */
 export async function registrarEntrada(dados: EntradaOS): Promise<OSCriada> {
   return (await api.post<OSCriada>('/ordens-servico', dados)).data;
 }
 
-export type ItemDetalhe = { servicoId: number; nome: string; comCera: boolean; precoFinal: number };
-export type AvariaDetalhe = { local: string; tipo: string; descricao: string | null };
-export type PagamentoDaOS = {
-  id: number;
-  ordemServicoId: number;
-  formaPagamento: string;
-  valorBruto: number;
-  percentualTaxa: number;
-  valorTaxa: number;
-  valorLiquido: number;
-  dataCaixa: string;
-  criadoEm: string;
-  estornado: boolean;
-};
+export type PagamentoDaOS = Schemas['PagamentoResponse'];
 
-type RespostaDetalhe = {
+type RespostaDetalhe = Omit<Schemas['DetalheOrdemResponse'], 'cartao'> & {
   cartao: Cartao;
-  itens: ItemDetalhe[];
-  pertencesEntrada: string | null;
-  pertencesEncontrados: string | null;
-  nomeQuemRetira: string | null;
-  semAvarias: boolean;
-  avarias: AvariaDetalhe[];
-  avaliacao: number | null;
-  valorPago: number;
-  saldoPendente: number;
-  pagamentos: PagamentoDaOS[];
 };
 
 /** O cartão do Pit Stop com itens, vistoria, avaliação, pagamentos e saldo (GET /ordens-servico/{id}/detalhe, só o Dono). */

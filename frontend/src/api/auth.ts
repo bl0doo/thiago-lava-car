@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { AuthResponse, LavadorResumo, Usuario } from './tipos';
+import type { AuthResponse, LavadorResumo, Schemas, Usuario } from './tipos';
 import { sessao } from '@/auth/sessao';
 
 function iniciarSessao(resposta: AuthResponse): Usuario {
@@ -30,14 +30,7 @@ export async function listarLavadores(): Promise<LavadorResumo[]> {
   return data;
 }
 
-export type CadastroCliente = {
-  nome: string;
-  telefone: string;
-  email: string;
-  senha: string;
-  canalPreferido: 'WhatsApp' | 'Telefone' | 'Email';
-  consentimentoLgpd: boolean;
-};
+export type CadastroCliente = Schemas['CadastroClienteRequest'];
 
 /** Cria a conta do cliente e já deixa a sessão aberta (a API responde 201 com token e cookie de renovação). */
 export async function cadastrarCliente(dados: CadastroCliente): Promise<Usuario> {

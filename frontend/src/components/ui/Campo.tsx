@@ -1,9 +1,9 @@
-import { CircleAlert } from 'lucide-react';
 import { useId, type InputHTMLAttributes } from 'react';
+import { DescricaoCampo, descricaoCampo } from './DescricaoCampo';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   rotulo: string;
-  erro?: string | undefined;
+  erro?: string;
   ajuda?: string;
 };
 
@@ -14,9 +14,6 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 export function Campo({ rotulo, erro, ajuda, id, className = '', ...resto }: Props) {
   const gerado = useId();
   const campoId = id ?? gerado;
-  const erroId = `${campoId}-erro`;
-  const ajudaId = `${campoId}-ajuda`;
-  const descricao = [erro ? erroId : null, ajuda ? ajudaId : null].filter(Boolean).join(' ') || undefined;
 
   return (
     <div className="flex flex-col gap-2xs">
@@ -26,21 +23,11 @@ export function Campo({ rotulo, erro, ajuda, id, className = '', ...resto }: Pro
       <input
         id={campoId}
         aria-invalid={erro ? true : undefined}
-        aria-describedby={descricao}
+        aria-describedby={descricaoCampo({ campoId, erro, ajuda })}
         className={`min-h-alvo w-full rounded-md border-2 bg-superficie px-md texto-corpo-g text-primario placeholder:text-secundario disabled:border-padrao disabled:bg-rebaixado disabled:text-secundario ${erro ? 'border-erro' : 'border-forte'} ${className}`}
         {...resto}
       />
-      {erro ? (
-        <p id={erroId} className="flex items-start gap-2xs texto-rotulo-p leading-5 text-erro">
-          <CircleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={2.5} />
-          {erro}
-        </p>
-      ) : null}
-      {ajuda ? (
-        <p id={ajudaId} className="texto-corpo-p text-secundario">
-          {ajuda}
-        </p>
-      ) : null}
+      <DescricaoCampo campoId={campoId} erro={erro} ajuda={ajuda} />
     </div>
   );
 }

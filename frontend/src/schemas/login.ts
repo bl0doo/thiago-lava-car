@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-export { pinSchema } from './comuns';
-
 /** Espelha o LoginRequestValidator da API (as mensagens também). */
 export const loginSchema = z.object({
   email: z.string().min(1, 'Informe o e-mail.').email('E-mail inválido.').max(254, 'E-mail muito longo.'),
