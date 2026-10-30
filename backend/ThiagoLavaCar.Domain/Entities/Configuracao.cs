@@ -21,7 +21,6 @@ public sealed class Configuracao : Entidade
     public decimal DiariaSabado { get; private set; }
     public int IntervaloAgendaMin { get; private set; }
 
-    /// <summary>Padrão da Entrega 2: segunda a sábado, das 8h às 18h, agenda de 30 em 30 minutos, diária de R$ 100 (R$ 120 no sábado).</summary>
     public static Configuracao Padrao(string nomeLavaJato) =>
         Criar(nomeLavaJato, null, new TimeOnly(8, 0), new TimeOnly(18, 0), "1,2,3,4,5,6", 100m, 120m, 30);
 

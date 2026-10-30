@@ -9,6 +9,7 @@ import { Alerta } from '@/components/ui/Alerta';
 import { Button, classesBotao } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { Placa } from '@/components/ui/Placa';
@@ -49,7 +50,6 @@ function CartaoAgendamento({ a, onCheckIn, onAcao }: { a: Agendamento; onCheckIn
   );
 }
 
-/** Agenda do dia do dono: horários reservados com check-in (abre a vistoria), falta e cancelamento. */
 export function Agenda() {
   const qc = useQueryClient();
   const [data, setData] = useState(hojeIso());
@@ -125,12 +125,7 @@ export function Agenda() {
         {data === '' ? <Alerta tipo="atencao">Escolha um dia.</Alerta> : null}
         {query.isPending && data !== '' ? <Carregando /> : null}
         {query.isError ? (
-          <div className="flex flex-col gap-sm">
-            <Alerta>{interpretarErro(query.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void query.refetch()}>
-              Tentar de novo
-            </Button>
-          </div>
+          <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
         ) : null}
         {query.isSuccess && agendamentos.length === 0 ? (
           <EstadoVazio Icone={CalendarDays} titulo="Nenhum horário neste dia">

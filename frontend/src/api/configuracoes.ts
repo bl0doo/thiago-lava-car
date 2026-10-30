@@ -1,18 +1,10 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
-export type Configuracao = {
-  nomeLavaJato: string;
-  telefone: string | null;
-  abertura: string;
-  fechamento: string;
-  diasFuncionamento: number[];
-  diariaSemana: number;
-  diariaSabado: number;
-  intervaloAgendaMin: number;
-};
+export type Configuracao = Schemas['ConfiguracaoResponse'];
 
-export type ModeloMensagem = { tipo: string; texto: string; atualizadoEm: string };
-export type Taxa = { formaPagamento: string; percentual: number; valorFixo: number };
+export type ModeloMensagem = Schemas['ModeloMensagemResponse'];
+export type Taxa = Schemas['TaxaResponse'];
 
 export async function obterConfiguracao(): Promise<Configuracao> {
   return (await api.get<Configuracao>('/configuracoes')).data;

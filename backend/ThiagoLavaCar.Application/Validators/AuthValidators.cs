@@ -89,7 +89,6 @@ public sealed class EditarUsuarioRequestValidator : AbstractValidator<EditarUsua
 
 internal static class SenhaRegras
 {
-    /// <summary>Mínimo de 8 caracteres, com letras e números (Entrega 2, seção de segurança).</summary>
     public static IRuleBuilderOptions<T, string> SenhaForte<T>(this IRuleBuilder<T, string> regra) =>
         regra.NotEmpty().WithMessage("Informe a senha.")
             .MinimumLength(8).WithMessage("A senha deve ter pelo menos 8 caracteres.")

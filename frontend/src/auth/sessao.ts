@@ -1,7 +1,7 @@
 import type { Usuario } from '@/api/tipos';
 
 /**
- * Sessão em memória: o access token nunca vai para localStorage (Entrega 2, seção 4).
+ * Sessão em memória: o access token nunca vai para localStorage.
  * Ao recarregar a página, a sessão volta pelo cookie HttpOnly de renovação (o do lavador vale até o fim do turno).
  */
 type Estado = { token: string | null; usuario: Usuario | null };

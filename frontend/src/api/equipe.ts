@@ -1,8 +1,9 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
-export type Diaria = { id: number; lavadorId: number; data: string; valor: number; paga: boolean };
-export type Diarias = { itens: Diaria[]; total: number };
-export type DiariasDoDia = { criadas: Diaria[]; jaLancadas: number[] };
+export type Diaria = Schemas['DiariaResponse'];
+export type Diarias = Schemas['DiariasResponse'];
+export type DiariasDoDia = Schemas['DiariasDoDiaResponse'];
 
 /** GET /diarias?mes=AAAA-MM */
 export async function listarDiarias(mes: string): Promise<Diarias> {
@@ -33,8 +34,8 @@ export async function alterarAtivo(id: number, ativo: boolean): Promise<void> {
   await api.patch(`/usuarios/${id}/ativo`, { ativo });
 }
 
-export type Membro = { id: number; nome: string; apelido: string | null; perfil: string; ativo: boolean };
-export type NovoLavador = { nome: string; apelido: string; pin: string };
+export type Membro = Schemas['UsuarioDetalheResponse'];
+export type NovoLavador = Schemas['CriarLavadorRequest'];
 
 /** GET /usuarios?perfil=Lavador: inclui os desativados, ordenado por nome. */
 export async function listarEquipe(): Promise<Membro[]> {

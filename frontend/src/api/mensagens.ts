@@ -1,8 +1,9 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
 export type TipoMensagem = 'lavagem-iniciada' | 'lavagem-concluida';
-export type MensagemGerada = { texto: string; canal: string; linkWhatsApp: string };
-export type MensagemEnviada = { id: number; tipo: string; texto: string; enviadaEm: string };
+export type MensagemGerada = Schemas['MensagemGeradaResponse'];
+export type MensagemEnviada = Schemas['MensagemEnviadaResponse'];
 
 /** GET /ordens-servico/{id}/mensagens/{tipo}: texto pronto e link do WhatsApp. 409 se a OS não está na etapa certa. */
 export async function gerarMensagem(osId: number, tipo: TipoMensagem): Promise<MensagemGerada> {

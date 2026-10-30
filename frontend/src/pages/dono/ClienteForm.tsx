@@ -19,14 +19,13 @@ import { clienteSchema, type ClienteFormEntrada, type ClienteFormSaida } from '@
 
 const CAMPOS = ['nome', 'telefone', 'email', 'canalPreferido', 'consentimentoLgpd'] as const;
 
-/** Id do cadastro já existente que a API devolve no 409 de telefone repetido (Entrega 2: POST /clientes). */
+/** Id do cadastro já existente que a API devolve no 409 de telefone repetido. */
 function idExistente(e: unknown): number | null {
   if (!axios.isAxiosError(e)) return null;
   const d = e.response?.data as { clienteId?: number; idExistente?: number } | undefined;
   return d?.clienteId ?? d?.idExistente ?? null;
 }
 
-/** Novo cliente (balcão) e edição de cliente, com os veículos dele. Rota `/dono/clientes/novo` ou `/dono/clientes/:id`. */
 export function ClienteForm() {
   const { id } = useParams();
   const editando = id !== undefined;

@@ -132,4 +132,16 @@ public class PainelServiceTests
 
         Assert.Equal(["Caixa de 18/10 não fechado"], painel.Pendencias);
     }
+
+    [Fact]
+    public async Task Margem_media_que_arredonda_para_zero_nao_causa_divisao_por_zero()
+    {
+        _relatorio.SomarDespesasAsync(PrimeiroDoMes, Hoje, Arg.Any<CancellationToken>()).Returns(1000m);
+        _relatorio.ListarOrdensPagasAsync(Hoje.AddDays(-29), Hoje, Arg.Any<CancellationToken>())
+            .Returns([Paga(8.01m), Paga(8m), Paga(8m)]);
+
+        var painel = await _painel.ObterHojeAsync(CancellationToken.None);
+
+        Assert.Null(painel.CarrosFaltamParaPagarContas);
+    }
 }

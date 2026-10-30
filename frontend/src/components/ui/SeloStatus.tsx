@@ -1,7 +1,7 @@
 import { Ban, CircleAlert, CircleCheck, Clock, Droplet, Flag, TriangleAlert, type LucideIcon } from 'lucide-react';
 import type { StatusOS } from '@/api/tipos';
 
-export type StatusSelo = StatusOS | 'Entregue' | 'Cancelada' | 'Atencao' | 'Erro';
+export type StatusSelo = StatusOS | 'Atencao' | 'Erro';
 
 const SELOS: Record<StatusSelo, { texto: string; cores: string; Icone: LucideIcon }> = {
   Aguardando: { texto: 'Aguardando', cores: 'bg-aguardando-bg text-aguardando', Icone: Clock },

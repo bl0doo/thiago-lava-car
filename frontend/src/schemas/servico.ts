@@ -20,7 +20,7 @@ const precoSchema = z
     if (p.preco.trim() === '' && p.precoComCera.trim() !== '') ctx.addIssue({ code: 'custom', path: ['preco'], message: 'Informe o preço sem cera.' });
   });
 
-/** Catálogo (Entrega 2): um preço por tipo de veículo, cera opcional, tempo em minutos e custo de insumos. */
+/** Catálogo: um preço por tipo de veículo, cera opcional, tempo em minutos e custo de insumos. */
 export const servicoSchema = z.object({
   nome: z.string().trim().min(2, 'O nome deve ter ao menos 2 caracteres.').max(100, 'O nome pode ter até 100 caracteres.'),
   categoria: z.string().trim().min(1, 'Informe a categoria.').max(50, 'A categoria pode ter até 50 caracteres.'),

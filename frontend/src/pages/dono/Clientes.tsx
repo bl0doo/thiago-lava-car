@@ -3,17 +3,15 @@ import { ChevronRight, Plus, SearchX, Users } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { listarClientes } from '@/api/clientes';
-import { interpretarErro } from '@/api/erros';
 import { BarraTitulo } from '@/components/layout/BarraTitulo';
-import { Alerta } from '@/components/ui/Alerta';
 import { Button, classesBotao } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { formatarTelefone } from '@/lib/format';
 import { useDebounce } from '@/lib/useDebounce';
 
-/** Clientes (tela 13): busca por nome, telefone ou placa; estados vazio, sem resultado e erro. */
 export function Clientes() {
   const [texto, setTexto] = useState('');
   const [pagina, setPagina] = useState(1);
@@ -45,12 +43,7 @@ export function Clientes() {
         />
         {consulta.isPending ? <Carregando texto="Carregando clientes…" cartoes={3} /> : null}
         {consulta.isError ? (
-          <>
-            <Alerta>{interpretarErro(consulta.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void consulta.refetch()}>
-              Tentar de novo
-            </Button>
-          </>
+          <ErroConsulta erro={consulta.error} aoTentarNovamente={consulta.refetch} />
         ) : null}
         {dados && dados.itens.length === 0 ? (
           busca ? (

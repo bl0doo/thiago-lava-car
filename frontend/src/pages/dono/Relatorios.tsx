@@ -1,14 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { ChartNoAxesColumn } from 'lucide-react';
 import { useState } from 'react';
-import { interpretarErro } from '@/api/erros';
 import { faturamento, lucroPorServico, pontoEquilibrio, produtividade, type Periodo } from '@/api/relatorios';
 import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Abas } from '@/components/ui/Abas';
 import { Alerta } from '@/components/ui/Alerta';
-import { Button } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { formatarDataIso, formatarMinutos, formatarMoeda, hojeIso } from '@/lib/format';
 
@@ -27,12 +26,7 @@ function Consulta<T>({ query, vazio, children }: { query: ReturnType<typeof useQ
   if (query.isPending) return <Carregando />;
   if (query.isError) {
     return (
-      <div className="flex flex-col gap-sm">
-        <Alerta>{interpretarErro(query.error).mensagem}</Alerta>
-        <Button variante="contorno" onClick={() => void query.refetch()}>
-          Tentar de novo
-        </Button>
-      </div>
+      <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
     );
   }
   if (vazio?.(query.data)) {
@@ -140,7 +134,7 @@ function Equilibrio() {
                 <Linha rotulo="Despesas" valor={formatarMoeda(p.despesas)} />
                 <Linha rotulo="Diárias" valor={formatarMoeda(p.diarias)} />
                 <Linha rotulo="Contas do mês" valor={formatarMoeda(p.contas)} destaque />
-                <Linha rotulo="Margem por carro" valor={p.margemPorCarro === null ? 'sem histórico' : formatarMoeda(p.margemPorCarro)} />
+                <Linha rotulo="Margem por carro" valor={p.margemPorCarro == null ? 'sem histórico' : formatarMoeda(p.margemPorCarro)} />
                 <Linha rotulo="Carros necessários" valor={p.carrosNecessarios === null ? '—' : String(p.carrosNecessarios)} />
                 <Linha rotulo="Carros pagos no mês" valor={String(p.carrosFeitos)} />
               </dl>

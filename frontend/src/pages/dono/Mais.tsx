@@ -14,7 +14,6 @@ const ITENS: { para: string; titulo: string; detalhe: string; Icone: LucideIcon 
   { para: '/dono/configuracoes', titulo: 'Configurações', detalhe: 'Horários, taxas e mensagens', Icone: Settings },
 ];
 
-/** Tela 14 do protótipo: menu de gestão em lista, com ícone, título, detalhe e seta, e o botão Sair. */
 export function Mais() {
   const { usuario, sair } = useAuth();
   return (

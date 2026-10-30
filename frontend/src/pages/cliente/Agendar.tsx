@@ -24,7 +24,6 @@ function somarDias(dia: string, dias: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Agendar (cliente): veículo, serviço, cera, dia e horário livre, com preço e duração antes de confirmar. */
 export function Agendar() {
   const qc = useQueryClient();
   const hoje = hojeIso();

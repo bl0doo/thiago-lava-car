@@ -48,7 +48,7 @@ public sealed class AgendamentoService(
         var ocupacao = await agendamentos.ListarOcupacaoAsync(dia, fimDoDia, ct);
         var lavadores = (await usuarios.ListarLavadoresAtivosAsync(ct)).Count;
 
-        var horarios = AgendaCalculo.HorariosLivres(configuracao, data, servico.TempoEstimadoMin, ocupacao.ToList(), lavadores, agora)
+        var horarios = AgendaCalculo.HorariosLivres(configuracao, data, servico.TempoEstimadoMin, ocupacao, lavadores, agora)
             .Select(h => h.ToString("HH:mm", CultureInfo.InvariantCulture))
             .ToList();
         return new HorariosResponse(preco, servico.TempoEstimadoMin, horarios);

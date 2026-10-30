@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import type { Servico } from '@/api/servicos';
 import { erroHttp } from '@/test/fabrica';
 import { NovaEntrada } from './dono/NovaEntrada';
 import { resumo } from './dono/entrada/PassoServicos';
@@ -15,7 +16,7 @@ vi.mock('@/api/ordensServico', () => os);
 const clientes = vi.hoisted(() => ({ listarClientes: vi.fn(), obterCliente: vi.fn() }));
 vi.mock('@/api/clientes', () => clientes);
 
-const catalogo = [
+const catalogo: Servico[] = [
   { id: 1, nome: 'Lavagem completa', categoria: 'Lavagem', tempoEstimadoMin: 90, ativo: true, precos: [{ tipoVeiculo: 'Carro', preco: 80, precoComCera: 100 }, { tipoVeiculo: 'Moto', preco: 40, precoComCera: null }] },
   { id: 4, nome: 'Motor', categoria: 'Lavagem', tempoEstimadoMin: 30, ativo: true, precos: [{ tipoVeiculo: 'Carro', preco: 120, precoComCera: null }] },
 ];
@@ -101,6 +102,10 @@ describe('Nova entrada', () => {
       nomeQuemRetira: null,
       aceiteCliente: true,
     });
+
+    await u.click(screen.getByRole('button', { name: 'Registrar outro carro' }));
+    expect(screen.getByLabelText('Placa do carro')).toHaveValue('');
+    expect(screen.queryByText('Entrada registrada')).not.toBeInTheDocument();
   });
 
   it('mostra o 409 de veículo que já está no pátio', async () => {
@@ -125,7 +130,7 @@ describe('Nova entrada', () => {
 
 describe('resumo de preços', () => {
   it('usa o preço corrigido pelo dono e soma a duração', () => {
-    const r = resumo(catalogo as never, [{ servicoId: 1, comCera: false, precoManual: '70,00' }, { servicoId: 4, comCera: false, precoManual: '' }], 'Carro');
+    const r = resumo(catalogo, [{ servicoId: 1, comCera: false, precoManual: '70,00' }, { servicoId: 4, comCera: false, precoManual: '' }], 'Carro');
     expect(r).toEqual({ total: 190, minutos: 120 });
   });
 });

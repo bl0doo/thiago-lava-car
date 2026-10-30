@@ -1,25 +1,16 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from '@/auth/AuthContext';
+import { ConsultasDaSessao } from '@/auth/ConsultasDaSessao';
 import { rotas } from '@/routes';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 5_000,
-    },
-  },
-});
 
 const router = createBrowserRouter(rotas);
 
 export function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
+    <AuthProvider>
+      <ConsultasDaSessao>
         <RouterProvider router={router} />
-      </AuthProvider>
-    </QueryClientProvider>
+      </ConsultasDaSessao>
+    </AuthProvider>
   );
 }

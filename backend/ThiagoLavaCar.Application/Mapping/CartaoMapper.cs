@@ -6,7 +6,7 @@ namespace ThiagoLavaCar.Application.Mapping;
 
 public static class CartaoMapper
 {
-    /// <summary>O Lavador nunca recebe valores nem dados de contato do cliente (Entrega 2, seção 4).</summary>
+    /// <summary>O Lavador nunca recebe valores nem dados de contato do cliente.</summary>
     public static CartaoResponse Mapear(OrdemServico os, Perfil perfil)
     {
         var verFinanceiro = perfil == Perfil.Dono;

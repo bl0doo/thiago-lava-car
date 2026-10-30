@@ -5,7 +5,6 @@ import { desfazerUltimoPasso, encerrarLavagem, iniciarLavagem, obterQuadro } fro
 import type { Cartao, Quadro } from '@/api/tipos';
 import { aplicarAcao, substituir, type Acao } from '@/lib/quadro';
 
-/** Quadro e fila são atualizados a cada 15 s e ao voltar para a aba (Entrega 2, seção 5). */
 export const INTERVALO_QUADRO_MS = 15_000;
 
 const chaveQuadro = ['quadro'] as const;

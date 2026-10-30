@@ -5,7 +5,7 @@ using ThiagoLavaCar.Domain.Common;
 namespace ThiagoLavaCar.Application.Services;
 
 /// <summary>
-/// Lucro por serviço (Entrega 2, regras de cálculo): receita líquida − insumos − mão de obra rateada.
+/// Lucro por serviço: receita líquida − insumos − mão de obra rateada.
 /// A mão de obra do período é rateada por minuto lavado; numa OS com vários itens, a receita segue a proporção do preço
 /// e o tempo e a mão de obra seguem a proporção do tempo estimado de cada item.
 /// </summary>

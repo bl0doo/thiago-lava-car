@@ -32,7 +32,7 @@ public sealed record ItemEntradaRequest(int ServicoId, bool ComCera, decimal? Pr
 
 public sealed record AvariaRequest(string Local, string Tipo, string? Descricao);
 
-/// <summary>Entrada do carro com a vistoria (Entrega 2, POST /ordens-servico).</summary>
+/// <summary>Entrada do carro com a vistoria (POST /ordens-servico).</summary>
 public sealed record RegistrarEntradaRequest(
     int VeiculoId,
     IReadOnlyList<ItemEntradaRequest> Itens,
