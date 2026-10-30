@@ -1,0 +1,14 @@
+# PostgreSQL local para desenvolvimento (alternativa ao Supabase; ver docs/decisoes/0001).
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: thiago_lava_car
+    ports:
+      - "5432:5432"
+    volumes:
+      - dados:/var/lib/postgresql/data
+volumes:
+  dados:

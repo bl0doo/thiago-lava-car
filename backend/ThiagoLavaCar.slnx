@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/ThiagoLavaCar.IntegrationTests/ThiagoLavaCar.IntegrationTests.csproj" />
+    <Project Path="tests/ThiagoLavaCar.UnitTests/ThiagoLavaCar.UnitTests.csproj" />
+  </Folder>
+  <Project Path="ThiagoLavaCar.Api/ThiagoLavaCar.Api.csproj" />
+  <Project Path="ThiagoLavaCar.Application/ThiagoLavaCar.Application.csproj" />
+  <Project Path="ThiagoLavaCar.Domain/ThiagoLavaCar.Domain.csproj" />
+  <Project Path="ThiagoLavaCar.Infrastructure/ThiagoLavaCar.Infrastructure.csproj" />
+</Solution>

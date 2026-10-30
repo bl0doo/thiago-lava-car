@@ -1,0 +1,253 @@
+@import 'tailwindcss';
+
+/*
+ * Design System "Box de pista" (Figma: Thiago Lava Car, página Design System).
+ * As variáveis em :root têm os mesmos nomes das variáveis do Figma (coleções Cor, Espaço, Raio e Tamanho),
+ * então um valor trocado no Figma muda só aqui. O @theme abaixo expõe esses tokens como classes do Tailwind.
+ * Identidade: papel de ficha (fundo), asfalto (texto), amarelo-bandeirada (ação principal), azul-pista
+ * (ação secundária e "em andamento"), verde-largada (concluído); vermelho e laranja só para erro e atenção.
+ */
+:root {
+  /* Primitivas */
+  --asfalto-950: #101214;
+  --asfalto-900: #1a1d20;
+  --asfalto-800: #2a2e33;
+  --asfalto-700: #3d4349;
+  --asfalto-600: #5a6169;
+  --asfalto-500: #7a828a;
+  --asfalto-300: #bdc2c7;
+  --asfalto-200: #d9dcdf;
+  --asfalto-100: #ecedee;
+  --papel-50: #fbf9f4;
+  --papel-100: #f4f1ea;
+  --papel-200: #e8e3d8;
+  --papel-300: #d6cfc0;
+  --branco: #ffffff;
+  --pista-900: #072b57;
+  --pista-700: #0b4a94;
+  --pista-600: #0f5cb5;
+  --pista-100: #dce9f8;
+  --bandeirada-500: #ffc20e;
+  --bandeirada-400: #ffd24d;
+  --bandeirada-100: #fff1bf;
+  --largada-700: #19683f;
+  --largada-100: #d8efe2;
+  --alerta-700: #b3261e;
+  --alerta-100: #fbe0dd;
+  --aviso-700: #9a4a00;
+  --aviso-100: #ffe6cc;
+
+  /* Cor (semânticas) */
+  --bg-app: var(--papel-100);
+  --bg-superficie: var(--papel-50);
+  --bg-rebaixado: var(--papel-200);
+  --bg-inverso: var(--asfalto-900);
+  --texto-primario: var(--asfalto-900);
+  --texto-secundario: var(--asfalto-600);
+  --texto-inverso: var(--papel-50);
+  --texto-sobre-destaque: var(--asfalto-950);
+  --texto-marca: var(--pista-700);
+  --borda-forte: var(--asfalto-900);
+  --borda-padrao: var(--papel-300);
+  --foco-anel: var(--pista-600);
+  --acao-primaria-bg: var(--bandeirada-500);
+  --acao-primaria-bg-hover: var(--bandeirada-400);
+  --acao-secundaria-bg: var(--pista-700);
+  --acao-secundaria-bg-hover: var(--pista-900);
+  --acao-perigo-bg: var(--alerta-700);
+  --status-aguardando-fg: var(--asfalto-800);
+  --status-aguardando-bg: var(--papel-200);
+  --status-andamento-fg: var(--pista-700);
+  --status-andamento-bg: var(--pista-100);
+  --status-concluido-fg: var(--largada-700);
+  --status-concluido-bg: var(--largada-100);
+  --status-aviso-fg: var(--aviso-700);
+  --status-aviso-bg: var(--aviso-100);
+  --status-erro-fg: var(--alerta-700);
+  --status-erro-bg: var(--alerta-100);
+
+  /* Espaço */
+  --espaco-2xs: 4px;
+  --espaco-xs: 8px;
+  --espaco-sm: 12px;
+  --espaco-md: 16px;
+  --espaco-lg: 24px;
+  --espaco-xl: 32px;
+  --espaco-2xl: 48px;
+
+  /* Raio */
+  --raio-sm: 4px;
+  --raio-md: 8px;
+  --raio-lg: 12px;
+  --raio-pill: 999px;
+
+  /* Tamanho: alvos de toque */
+  --alvo-minimo: 48px;
+  --alvo-lavador: 56px;
+  --alvo-lavador-principal: 72px;
+}
+
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-app: var(--bg-app);
+  --color-superficie: var(--bg-superficie);
+  --color-rebaixado: var(--bg-rebaixado);
+  --color-inverso: var(--bg-inverso);
+  --color-primario: var(--texto-primario);
+  --color-secundario: var(--texto-secundario);
+  --color-texto-inverso: var(--texto-inverso);
+  --color-sobre-destaque: var(--texto-sobre-destaque);
+  --color-marca: var(--texto-marca);
+  --color-forte: var(--borda-forte);
+  --color-padrao: var(--borda-padrao);
+  --color-foco: var(--foco-anel);
+  --color-acao-primaria: var(--acao-primaria-bg);
+  --color-acao-primaria-hover: var(--acao-primaria-bg-hover);
+  --color-acao-secundaria: var(--acao-secundaria-bg);
+  --color-acao-secundaria-hover: var(--acao-secundaria-bg-hover);
+  --color-acao-perigo: var(--acao-perigo-bg);
+  --color-aguardando: var(--status-aguardando-fg);
+  --color-aguardando-bg: var(--status-aguardando-bg);
+  --color-andamento: var(--status-andamento-fg);
+  --color-andamento-bg: var(--status-andamento-bg);
+  --color-concluido: var(--status-concluido-fg);
+  --color-concluido-bg: var(--status-concluido-bg);
+  --color-aviso: var(--status-aviso-fg);
+  --color-aviso-bg: var(--status-aviso-bg);
+  --color-erro: var(--status-erro-fg);
+  --color-erro-bg: var(--status-erro-bg);
+  --color-branco: var(--branco);
+
+  /* Atenção: com --spacing-sm/md/lg/xl, classes como max-w-md passam a valer o espaço (16 px), não a largura
+     de contêiner. Para larguras máximas, use valores explícitos (ex.: max-w-[28rem]). */
+  --spacing-2xs: var(--espaco-2xs);
+  --spacing-xs: var(--espaco-xs);
+  --spacing-sm: var(--espaco-sm);
+  --spacing-md: var(--espaco-md);
+  --spacing-lg: var(--espaco-lg);
+  --spacing-xl: var(--espaco-xl);
+  --spacing-2xl: var(--espaco-2xl);
+  --spacing-alvo: var(--alvo-minimo);
+  --spacing-alvo-lavador: var(--alvo-lavador);
+  --spacing-alvo-lavador-principal: var(--alvo-lavador-principal);
+
+  --radius-sm: var(--raio-sm);
+  --radius-md: var(--raio-md);
+  --radius-lg: var(--raio-lg);
+  --radius-pill: var(--raio-pill);
+
+  /* sombra seca, sem blur, 3 px para baixo */
+  --shadow-seca: 0 3px 0 var(--borda-forte);
+
+  --font-sans: 'Barlow', system-ui, sans-serif;
+  --font-titulo: 'Barlow Condensed', 'Arial Narrow', system-ui, sans-serif;
+  --font-titulo-semi: 'Barlow Semi Condensed', 'Barlow Condensed', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Estilos de texto do Figma (16 estilos). Tamanho/altura de linha em px, como no arquivo. */
+@utility texto-numero-gg {
+  font: 700 64px/64px var(--font-titulo);
+}
+@utility texto-numero-m {
+  font: 700 40px/40px var(--font-titulo);
+}
+@utility texto-h1 {
+  font: 600 32px/36px var(--font-titulo);
+}
+@utility texto-h2 {
+  font: 600 24px/28px var(--font-titulo);
+}
+@utility texto-h3 {
+  font: 600 20px/24px var(--font-titulo-semi);
+}
+@utility texto-eyebrow {
+  font: 600 14px/16px var(--font-titulo);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@utility texto-corpo-g {
+  font: 400 18px/26px var(--font-sans);
+}
+@utility texto-corpo-m {
+  font: 400 16px/24px var(--font-sans);
+}
+@utility texto-corpo-p {
+  font: 400 14px/20px var(--font-sans);
+}
+@utility texto-rotulo-g {
+  font: 600 18px/22px var(--font-sans);
+}
+@utility texto-rotulo-m {
+  font: 600 16px/20px var(--font-sans);
+}
+@utility texto-rotulo-p {
+  font: 600 14px/16px var(--font-sans);
+}
+@utility texto-botao-lavador {
+  font: 700 28px/32px var(--font-titulo);
+  letter-spacing: 0.02em;
+}
+@utility texto-mono-placa {
+  font: 700 22px/28px var(--font-mono);
+  letter-spacing: 0.04em;
+}
+@utility texto-mono-cronometro {
+  font: 700 32px/36px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+@utility texto-mono-dado {
+  font: 500 14px/20px var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Anel de foco: 4 px por fora do componente. Em fundo azul, anel escuro (pendência 2 do Design System). */
+@utility anel-foco {
+  outline: 4px solid var(--foco-anel);
+  outline-offset: 2px;
+}
+
+/* Faixa quadriculada da marca (bandeira de chegada), 12 px. */
+@utility faixa-quadriculada {
+  height: 12px;
+  background: repeating-linear-gradient(90deg, var(--acao-primaria-bg) 0 12px, var(--bg-inverso) 12px 24px);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--texto-primario);
+    background: var(--bg-app);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: 4px solid var(--foco-anel);
+    outline-offset: 2px;
+  }
+
+  button,
+  [role='button'],
+  a {
+    touch-action: manipulation;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

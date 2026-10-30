@@ -1,0 +1,19 @@
+name: Sugestão de Funcionalidade
+description: Sugira uma nova ideia ou melhoria para o sistema.
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Descrição da Proposta
+      description: Uma explicação clara do que você gostaria que fosse implementado.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivação / Caso de Uso
+      description: Por que essa funcionalidade é útil para o lava-jato ou para o cliente?
+    validations:
+      required: false

@@ -1,0 +1,62 @@
+# ==========================================
+# .NET / C#
+# ==========================================
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+.idea/
+*.suo
+*.userprefs
+TestResults/
+*.pfx
+*.cer
+*.crt
+
+# ==========================================
+# Node / Frontend (React + Vite + TypeScript)
+# ==========================================
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# Relatórios de testes e automação
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# ==========================================
+# Variáveis de Ambiente e Segredos
+# ==========================================
+.env
+.env.*
+!.env.example
+*.local.json
+appsettings.Development.json
+
+# ==========================================
+# Logs
+# ==========================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# Sistema Operacional
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
