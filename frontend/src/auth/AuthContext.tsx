@@ -1,4 +1,5 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { createContext, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import * as authApi from '@/api/auth';
 import { renovarSessao } from '@/api/client';
 import type { Perfil, Usuario } from '@/api/tipos';
@@ -17,10 +18,21 @@ type AuthContextoValor = {
 const AuthContexto = createContext<AuthContextoValor | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
   const { usuario } = useSyncExternalStore(sessao.assinar, sessao.obter);
   const [restaurando, setRestaurando] = useState(true);
 
-  // Ao abrir ou recarregar a página, tenta recuperar a sessão pelo cookie de renovação.
+  useEffect(() => {
+    let usuarioId = sessao.obter().usuario?.id;
+    return sessao.assinar(() => {
+      const proximoId = sessao.obter().usuario?.id;
+      if (usuarioId !== proximoId) {
+        usuarioId = proximoId;
+        queryClient.clear();
+      }
+    });
+  }, [queryClient]);
+
   useEffect(() => {
     let ativo = true;
     renovarSessao()
@@ -33,19 +45,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const entrar = useCallback((email: string, senha: string) => authApi.entrar(email, senha), []);
-  const entrarComPin = useCallback((id: number, pin: string) => authApi.entrarComPin(id, pin), []);
-  const sair = useCallback(() => authApi.sair(), []);
-
   const valor = useMemo<AuthContextoValor>(
     () => ({
       status: restaurando && !usuario ? 'carregando' : usuario ? 'autenticado' : 'anonimo',
       usuario,
-      entrar,
-      entrarComPin,
-      sair,
+      entrar: authApi.entrar,
+      entrarComPin: authApi.entrarComPin,
+      sair: authApi.sair,
     }),
-    [restaurando, usuario, entrar, entrarComPin, sair],
+    [restaurando, usuario],
   );
 
   return <AuthContexto value={valor}>{children}</AuthContexto>;
@@ -57,7 +65,6 @@ export function useAuth(): AuthContextoValor {
   return contexto;
 }
 
-/** Rota inicial de cada perfil, logo após o login (Entrega 2, seção 5). */
 export function rotaInicial(perfil: Perfil): string {
   switch (perfil) {
     case 'Dono':

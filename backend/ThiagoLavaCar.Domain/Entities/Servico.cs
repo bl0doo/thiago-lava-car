@@ -20,23 +20,9 @@ public sealed class Servico : Entidade
 
     public static Servico Criar(string nome, string categoria, int tempoEstimadoMin, decimal custoInsumos)
     {
-        if (tempoEstimadoMin <= 0)
-        {
-            throw new RegraInvalidaException("O tempo estimado deve ser maior que zero.");
-        }
-
-        if (custoInsumos < 0)
-        {
-            throw new RegraInvalidaException("O custo de insumos não pode ser negativo.");
-        }
-
-        return new Servico
-        {
-            Nome = nome,
-            Categoria = categoria,
-            TempoEstimadoMin = tempoEstimadoMin,
-            CustoInsumos = Dinheiro.Arredondar(custoInsumos),
-        };
+        var servico = new Servico();
+        servico.Atualizar(nome, categoria, tempoEstimadoMin, custoInsumos);
+        return servico;
     }
 
     public void DefinirPreco(TipoVeiculo tipo, decimal preco, decimal? precoComCera)

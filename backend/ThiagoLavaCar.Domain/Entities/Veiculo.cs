@@ -21,20 +21,13 @@ public sealed class Veiculo : Entidade
 
     public static Veiculo Criar(int clienteId, string placa, string modeloDescricao, TipoVeiculo tipo, string? cor, int? modeloVeiculoId = null)
     {
-        if (!PlacaBrasileira.EhValida(placa))
-        {
-            throw new RegraInvalidaException("Placa inválida. Use o formato ABC1234 ou ABC1D23.");
-        }
-
-        return new Veiculo
+        var veiculo = new Veiculo
         {
             ClienteId = clienteId,
             ModeloVeiculoId = modeloVeiculoId,
-            Placa = PlacaBrasileira.Normalizar(placa),
-            ModeloDescricao = modeloDescricao,
-            Tipo = tipo,
-            Cor = cor,
         };
+        veiculo.Atualizar(placa, modeloDescricao, tipo, cor);
+        return veiculo;
     }
 
     public void Atualizar(string placa, string modeloDescricao, TipoVeiculo tipo, string? cor)

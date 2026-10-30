@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { sessao } from '@/auth/sessao';
-import type { AuthResponse, Perfil, Usuario } from './tipos';
+import type { AuthResponse, Usuario } from './tipos';
 
 declare module 'axios' {
   interface AxiosRequestConfig {
@@ -22,23 +22,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export function paraUsuario(resposta: AuthResponse): Usuario {
-  return { ...resposta.usuario, perfil: resposta.usuario.perfil as Perfil };
-}
-
 let renovacaoEmCurso: Promise<Usuario> | null = null;
 
 /**
  * Troca o refresh token do cookie por um novo par. Chamadas simultâneas compartilham a mesma requisição:
- * o refresh token gira a cada uso, e um token repetido derrubaria a sessão inteira (Entrega 2, seção 4).
+ * o refresh token gira a cada uso, e um token repetido derrubaria a sessão inteira.
  */
 export function renovarSessao(): Promise<Usuario> {
   renovacaoEmCurso ??= api
     .post<AuthResponse>('/auth/refresh', undefined, { semRenovacao: true })
     .then(({ data }) => {
-      const usuario = paraUsuario(data);
-      sessao.definir(data.accessToken, usuario);
-      return usuario;
+      sessao.definir(data.accessToken, data.usuario);
+      return data.usuario;
     })
     .finally(() => {
       renovacaoEmCurso = null;

@@ -15,12 +15,9 @@ public sealed class Diaria : Entidade
 
     public static Diaria Criar(int lavadorId, DateOnly data, decimal valor)
     {
-        if (valor <= 0)
-        {
-            throw new RegraInvalidaException("O valor da diária deve ser maior que zero.");
-        }
-
-        return new Diaria { LavadorId = lavadorId, Data = data, Valor = Dinheiro.Arredondar(valor) };
+        var diaria = new Diaria { LavadorId = lavadorId, Data = data };
+        diaria.Reajustar(valor);
+        return diaria;
     }
 
     public void MarcarPaga() => Paga = true;

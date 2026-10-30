@@ -14,12 +14,9 @@ public sealed class TaxaPagamento : Entidade
 
     public static TaxaPagamento Criar(FormaPagamento forma, decimal percentual, decimal valorFixo)
     {
-        if (percentual is < 0 or > 100 || valorFixo < 0)
-        {
-            throw new RegraInvalidaException("Taxa inválida: percentual entre 0 e 100 e valor fixo não negativo.");
-        }
-
-        return new TaxaPagamento { FormaPagamento = forma, Percentual = percentual, ValorFixo = valorFixo };
+        var taxa = new TaxaPagamento { FormaPagamento = forma };
+        taxa.Alterar(percentual, valorFixo);
+        return taxa;
     }
 
     public void Alterar(decimal percentual, decimal valorFixo)

@@ -29,7 +29,7 @@ public sealed class DiariaService(
 {
     public async Task<DiariasResponse> ListarAsync(string? mes, CancellationToken ct)
     {
-        var primeiro = ResolverMes(mes);
+        var primeiro = Periodo.ResolverMes(mes, relogio);
         var itens = (await diarias.ListarAsync(primeiro, primeiro.AddMonths(1).AddDays(-1), ct)).Select(Mapear).ToList();
         return new DiariasResponse(itens, Dinheiro.Arredondar(itens.Sum(d => d.Valor)));
     }
@@ -145,22 +145,6 @@ public sealed class DiariaService(
         var config = await configuracao.ObterAsync(ct)
             ?? throw new RegraInvalidaException("Informe o valor da diária: a configuração do lava-jato ainda não tem diária padrão.");
         return config.DiariaSugerida(data);
-    }
-
-    private DateOnly ResolverMes(string? mes)
-    {
-        if (string.IsNullOrWhiteSpace(mes))
-        {
-            var hoje = FusoBrasilia.DataDe(relogio.GetUtcNow());
-            return new DateOnly(hoje.Year, hoje.Month, 1);
-        }
-
-        if (!DateOnly.TryParseExact(mes + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var primeiro))
-        {
-            throw new RegraInvalidaException("Mês inválido. Use o formato AAAA-MM, por exemplo 2026-10.");
-        }
-
-        return primeiro;
     }
 
     private static DiariaResponse Mapear(Diaria d) => new(d.Id, d.LavadorId, d.Data, d.Valor, d.Paga);

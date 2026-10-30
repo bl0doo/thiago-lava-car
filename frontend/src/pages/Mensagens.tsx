@@ -1,11 +1,8 @@
 import { Lock, MapPinOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { BarraTitulo } from '@/components/layout/BarraTitulo';
-import { Alerta } from '@/components/ui/Alerta';
 import { classesBotao } from '@/components/ui/Button';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 
-/** Telas D10 e D11 do protótipo: o que aconteceu, em uma frase, e o caminho de volta. */
 function TelaDeErro({ titulo, codigo, children, Icone }: { titulo: string; codigo: string; children: string; Icone: typeof Lock }) {
   return (
     <main className="mx-auto flex min-h-dvh max-w-[28rem] flex-col justify-center gap-lg bg-app p-lg">
@@ -36,15 +33,3 @@ export function NaoEncontrada() {
   );
 }
 
-/** Tela ainda não implementada: guarda a rota prevista na Entrega 2 e diz de onde virão os dados. */
-export function EmConstrucao({ titulo, descricao }: { titulo: string; descricao: string }) {
-  return (
-    <section className="flex flex-col">
-      <BarraTitulo titulo={titulo} />
-      <div className="flex flex-col gap-md px-md">
-        <p className="texto-corpo-m text-secundario">{descricao}</p>
-        <Alerta tipo="informacao">Em construção</Alerta>
-      </div>
-    </section>
-  );
-}

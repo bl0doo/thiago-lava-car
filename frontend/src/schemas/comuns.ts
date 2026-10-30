@@ -27,6 +27,8 @@ export const canalSchema = z.enum(CANAIS, { error: 'Escolha o canal.' });
 export const TIPOS_VEICULO = ['Moto', 'Carro', 'Caminhonete'] as const;
 export const tipoVeiculoSchema = z.enum(TIPOS_VEICULO, { error: 'Escolha o tipo do veículo.' });
 
+export const pinSchema = z.string().regex(/^\d{4}$/, 'O PIN deve ter 4 dígitos.');
+
 export const FORMAS_PAGAMENTO = ['Pix', 'Debito', 'Credito', 'Dinheiro'] as const;
 export const ROTULO_FORMA: Record<(typeof FORMAS_PAGAMENTO)[number], string> = { Pix: 'Pix', Debito: 'Débito', Credito: 'Crédito', Dinheiro: 'Dinheiro' };
 

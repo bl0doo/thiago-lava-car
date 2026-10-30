@@ -1,11 +1,10 @@
-import { api, paraUsuario } from './client';
+import { api } from './client';
 import type { AuthResponse, LavadorResumo, Usuario } from './tipos';
 import { sessao } from '@/auth/sessao';
 
 function iniciarSessao(resposta: AuthResponse): Usuario {
-  const usuario = paraUsuario(resposta);
-  sessao.definir(resposta.accessToken, usuario);
-  return usuario;
+  sessao.definir(resposta.accessToken, resposta.usuario);
+  return resposta.usuario;
 }
 
 export async function entrar(email: string, senha: string): Promise<Usuario> {

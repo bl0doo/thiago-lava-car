@@ -6,7 +6,6 @@ using ThiagoLavaCar.Application.Exceptions;
 using ThiagoLavaCar.Domain.Common;
 using ThiagoLavaCar.Domain.Entities;
 using ThiagoLavaCar.Domain.Enums;
-using ThiagoLavaCar.Domain.Exceptions;
 
 namespace ThiagoLavaCar.Application.Services;
 
@@ -69,19 +68,3 @@ public sealed class DespesaService(
     private static DespesaResponse Mapear(Despesa d) => new(d.Id, d.Descricao, d.Categoria.ToString(), d.Valor, d.Data);
 }
 
-/// <summary>Período de listagem do financeiro: por padrão, o mês atual em Brasília.</summary>
-internal static class Periodo
-{
-    public static (DateOnly De, DateOnly Ate) Resolver(DateOnly? de, DateOnly? ate, TimeProvider relogio)
-    {
-        var hoje = FusoBrasilia.DataDe(relogio.GetUtcNow());
-        var inicio = de ?? new DateOnly(hoje.Year, hoje.Month, 1);
-        var fim = ate ?? (de is null ? hoje : inicio.AddMonths(1).AddDays(-1));
-        if (fim < inicio)
-        {
-            throw new RegraInvalidaException("A data final não pode ser anterior à inicial.");
-        }
-
-        return (inicio, fim);
-    }
-}

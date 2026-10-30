@@ -367,12 +367,12 @@ internal sealed class AgendamentoRepository(AppDbContext db) : IAgendamentoRepos
         Detalhar(db.Agendamentos.Where(a => a.Id == id)).FirstOrDefaultAsync(ct);
 
     public async Task<IReadOnlyList<AgendamentoDetalhado>> ListarDoPeriodoAsync(DateTimeOffset de, DateTimeOffset ate, CancellationToken ct) =>
-        (await Detalhar(db.Agendamentos.Where(a => a.Inicio >= de && a.Inicio < ate)).ToListAsync(ct))
-            .OrderBy(d => d.Agendamento.Inicio).ToList();
+        await Detalhar(db.Agendamentos.Where(a => a.Inicio >= de && a.Inicio < ate))
+            .OrderBy(d => d.Agendamento.Inicio).ToListAsync(ct);
 
     public async Task<IReadOnlyList<AgendamentoDetalhado>> ListarDoClienteAsync(int clienteId, CancellationToken ct) =>
-        (await Detalhar(db.Agendamentos.Where(a => a.ClienteId == clienteId)).ToListAsync(ct))
-            .OrderByDescending(d => d.Agendamento.Inicio).ToList();
+        await Detalhar(db.Agendamentos.Where(a => a.ClienteId == clienteId))
+            .OrderByDescending(d => d.Agendamento.Inicio).ToListAsync(ct);
 
     public Task<Agendamento?> ObterPorIdAsync(int id, CancellationToken ct) =>
         db.Agendamentos.FirstOrDefaultAsync(a => a.Id == id, ct);

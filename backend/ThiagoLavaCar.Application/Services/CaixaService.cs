@@ -108,20 +108,7 @@ public sealed class CaixaService(
 
     public async Task<IReadOnlyList<FechamentoResponse>> ListarFechamentosAsync(string? mes, CancellationToken ct)
     {
-        var referencia = relogio.GetUtcNow();
-        var ano = FusoBrasilia.DataDe(referencia).Year;
-        var numero = FusoBrasilia.DataDe(referencia).Month;
-        if (!string.IsNullOrWhiteSpace(mes))
-        {
-            if (!DateOnly.TryParseExact(mes + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var primeiro))
-            {
-                throw new RegraInvalidaException("Mês inválido. Use o formato AAAA-MM, por exemplo 2026-10.");
-            }
-
-            (ano, numero) = (primeiro.Year, primeiro.Month);
-        }
-
-        var inicio = new DateOnly(ano, numero, 1);
+        var inicio = Periodo.ResolverMes(mes, relogio);
         var fim = inicio.AddMonths(1).AddDays(-1);
         return (await caixa.ListarFechamentosAsync(inicio, fim, ct)).Select(Mapear).ToList();
     }

@@ -59,13 +59,7 @@ public sealed class RelatorioService(IRelatorioRepository relatorio, PontoEquili
     public async Task<PontoEquilibrioResponse> PontoEquilibrioAsync(string? mes, CancellationToken ct)
     {
         var hoje = FusoBrasilia.DataDe(relogio.GetUtcNow());
-        var primeiro = new DateOnly(hoje.Year, hoje.Month, 1);
-        if (!string.IsNullOrWhiteSpace(mes) &&
-            !DateOnly.TryParseExact(mes + "-01", "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out primeiro))
-        {
-            throw new RegraInvalidaException("Mês inválido. Use o formato AAAA-MM, por exemplo 2026-10.");
-        }
-
+        var primeiro = Periodo.ResolverMes(mes, relogio);
         if (primeiro > hoje)
         {
             throw new RegraInvalidaException("Não há ponto de equilíbrio para um mês futuro.");
