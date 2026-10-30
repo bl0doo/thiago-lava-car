@@ -1,35 +1,13 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
-export type LucroServico = {
-  servico: string;
-  quantidade: number;
-  receitaLiquida: number;
-  insumos: number;
-  maoDeObra: number;
-  lucro: number;
-  lucroMedio: number;
-  tempoMedioMin: number;
-};
+export type LucroServico = Schemas['LucroPorServicoResponse'];
 
-export type PontoEquilibrio = {
-  mes: string;
-  despesas: number;
-  diarias: number;
-  contas: number;
-  margemPorCarro: number | null;
-  margemEstimada: boolean;
-  carrosNecessarios: number | null;
-  carrosFeitos: number;
-  faltam: number | null;
-};
+export type PontoEquilibrio = Schemas['PontoEquilibrioResponse'];
 
-export type FaturamentoDia = { data: string; bruto: number; liquido: number; osPagas: number; ticketMedio: number };
+export type Faturamento = Schemas['FaturamentoResponse'];
 
-export type Faturamento = { dias: FaturamentoDia[]; totalBruto: number; totalLiquido: number; osPagas: number; ticketMedio: number };
-
-export type TempoServico = { servico: string; quantidade: number; tempoMedioMin: number; estimadoMedioMin: number };
-export type TempoLavador = { lavador: string; quantidade: number; tempoMedioMin: number };
-export type Produtividade = { porServico: TempoServico[]; porLavador: TempoLavador[] };
+export type Produtividade = Schemas['ProdutividadeResponse'];
 
 export type Periodo = { inicio: string; fim: string };
 

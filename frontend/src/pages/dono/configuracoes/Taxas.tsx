@@ -8,6 +8,7 @@ import { Alerta } from '@/components/ui/Alerta';
 import { Button } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { ROTULO_FORMA } from '@/schemas/comuns';
 import { taxaSchema, type TaxaEntrada } from '@/schemas/configuracao';
 
@@ -62,12 +63,7 @@ export function Taxas() {
   if (query.isPending) return <Carregando />;
   if (query.isError) {
     return (
-      <div className="flex flex-col gap-sm">
-        <Alerta>{interpretarErro(query.error).mensagem}</Alerta>
-        <Button variante="contorno" onClick={() => void query.refetch()}>
-          Tentar de novo
-        </Button>
-      </div>
+      <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
     );
   }
   return (

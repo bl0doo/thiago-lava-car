@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore;
 using ThiagoLavaCar.Domain.Entities;
 using ThiagoLavaCar.Domain.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace ThiagoLavaCar.IntegrationTests;
 

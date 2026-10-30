@@ -10,7 +10,6 @@ import { Carregando } from '@/components/ui/Carregando';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { formatarMinutos, formatarMoeda } from '@/lib/format';
 
-/** Serviços e preços (tela 15): catálogo com preço por tipo de veículo, tempo e custo de insumos; ativar e desativar. */
 export function Servicos() {
   const qc = useQueryClient();
   const consulta = useQuery({ queryKey: ['servicos'], queryFn: listarServicos });
@@ -46,7 +45,7 @@ export function Servicos() {
                   <p className="texto-rotulo-g">{s.nome}</p>
                   <p className="texto-corpo-p text-secundario">
                     {s.categoria} · {formatarMinutos(s.tempoEstimadoMin)}
-                    {s.custoInsumos !== undefined ? ` · insumos ${formatarMoeda(s.custoInsumos)}` : ''}
+                    {s.custoInsumos != null ? ` · insumos ${formatarMoeda(s.custoInsumos)}` : ''}
                   </p>
                 </div>
                 <span className="texto-rotulo-p text-secundario">{s.ativo ? 'Ativo' : 'Desativado'}</span>
@@ -55,7 +54,7 @@ export function Servicos() {
                 {s.precos.map((p) => (
                   <li key={p.tipoVeiculo} className="rounded-sm bg-rebaixado px-xs py-2xs texto-mono-dado">
                     {p.tipoVeiculo}: {formatarMoeda(p.preco)}
-                    {p.precoComCera !== null ? ` · cera ${formatarMoeda(p.precoComCera)}` : ''}
+                    {p.precoComCera != null ? ` · cera ${formatarMoeda(p.precoComCera)}` : ''}
                   </li>
                 ))}
               </ul>

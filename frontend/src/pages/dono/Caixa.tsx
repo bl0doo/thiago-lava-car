@@ -11,6 +11,7 @@ import { AreaTexto } from '@/components/ui/AreaTexto';
 import { Button } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { formatarDataIso, formatarMoeda, hojeIso, lerValor } from '@/lib/format';
 import { fechamentoSchema, reaberturaSchema, type FechamentoEntrada } from '@/schemas/caixa';
@@ -101,7 +102,6 @@ function FormularioFechamento({ resumo, data, onErro }: { resumo: CaixaResumo; d
   );
 }
 
-/** Caixa do dia (`/dono/caixa`): resumo por forma, conferência, fechamento e reabertura com justificativa. */
 export function Caixa() {
   const qc = useQueryClient();
   const hoje = hojeIso();
@@ -153,12 +153,7 @@ export function Caixa() {
         {erro ? <Alerta>{erro}</Alerta> : null}
         {resumo.isPending ? <Carregando cartoes={2} /> : null}
         {resumo.isError ? (
-          <>
-            <Alerta>{interpretarErro(resumo.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void resumo.refetch()}>
-              Tentar de novo
-            </Button>
-          </>
+          <ErroConsulta erro={resumo.error} aoTentarNovamente={resumo.refetch} />
         ) : null}
 
         {resumo.data ? (

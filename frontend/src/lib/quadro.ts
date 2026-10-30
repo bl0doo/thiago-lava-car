@@ -2,12 +2,12 @@ import type { Cartao, Quadro, StatusOS } from '@/api/tipos';
 
 export type Acao = 'iniciar' | 'encerrar' | 'desfazer';
 
-/** Janela em que o servidor aceita "Desfazer" (Entrega 2, seção 3). */
+/** Janela em que o servidor aceita "Desfazer". */
 export const JANELA_DESFAZER_MS = 2 * 60 * 1000;
 
 type Coluna = 'aguardando' | 'emAndamento' | 'concluido';
 
-const COLUNA_DE_STATUS: Record<StatusOS, Coluna> = {
+const COLUNA_DE_STATUS: Partial<Record<StatusOS, Coluna>> = {
   Aguardando: 'aguardando',
   EmAndamento: 'emAndamento',
   Concluido: 'concluido',
@@ -60,7 +60,7 @@ export function substituir(quadro: Quadro, cartao: Cartao): Quadro {
     emAndamento: sem(quadro.emAndamento),
     concluido: sem(quadro.concluido),
   };
-  const coluna = COLUNA_DE_STATUS[cartao.status as StatusOS];
+  const coluna = COLUNA_DE_STATUS[cartao.status];
   if (coluna) novo[coluna] = [...novo[coluna], cartao];
   return novo;
 }

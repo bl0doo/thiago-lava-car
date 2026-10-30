@@ -1,15 +1,8 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 import type { PagamentoDaOS } from './ordensServico';
 
-export type PagamentoRegistrado = {
-  id: number;
-  valorBruto: number;
-  percentualTaxa: number;
-  valorTaxa: number;
-  valorLiquido: number;
-  saldoPendente: number;
-  dataCaixa: string;
-};
+export type PagamentoRegistrado = Schemas['PagamentoRegistradoResponse'];
 
 /** POST /ordens-servico/{id}/pagamentos: o valor não passa do saldo e o caixa do dia não pode estar fechado. */
 export async function registrarPagamento(osId: number, formaPagamento: string, valorBruto: number): Promise<PagamentoRegistrado> {

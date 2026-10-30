@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import type { Cartao, StatusOS } from '@/api/tipos';
+import type { Cartao } from '@/api/tipos';
 import { Placa } from '@/components/ui/Placa';
 import { SeloStatus } from '@/components/ui/SeloStatus';
 import { formatarCronometro, formatarHora, formatarMinutos, formatarMoeda } from '@/lib/format';
@@ -20,7 +20,7 @@ type Props = {
  */
 export function CartaoOS({ cartao, children, href }: Props) {
   const agora = useAgora();
-  const status = cartao.status as StatusOS;
+  const status = cartao.status;
   const emAndamento = status === 'EmAndamento';
   const decorrido = emAndamento && cartao.inicioEm ? agora - new Date(cartao.inicioEm).getTime() : null;
   const passou = decorrido !== null && decorrido > cartao.duracaoEstimadaMin * 60_000;

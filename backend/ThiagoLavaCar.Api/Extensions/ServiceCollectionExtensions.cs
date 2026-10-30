@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System.Text;
 using ThiagoLavaCar.Api.Infrastructure;
 using ThiagoLavaCar.Application.Abstractions;
 using ThiagoLavaCar.Domain.Enums;
@@ -136,7 +136,7 @@ internal static class ServiceCollectionExtensions
         return services;
     }
 
-    /// <summary>Limite por IP nas rotas /auth/* (Entrega 2, seção 4: 10 tentativas por minuto).</summary>
+    /// <summary>Limite por IP nas rotas /auth/*.</summary>
     public static IServiceCollection AddRateLimitDeLogin(this IServiceCollection services, IConfiguration configuration)
     {
         var porMinuto = configuration.GetValue("RateLimit:AuthPorMinuto", 10);

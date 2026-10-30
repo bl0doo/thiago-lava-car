@@ -16,7 +16,6 @@ function PularParaConteudo() {
   );
 }
 
-/** Barra inferior do celular e do tablet em pé (componentes "Barra inferior (Dono)" e "(Cliente)"). */
 function BarraInferior({ itens, rotulo }: { itens: Item[]; rotulo: string }) {
   return (
     <nav aria-label={rotulo} className="sticky bottom-0 z-10 border-t-2 border-forte bg-superficie pb-[env(safe-area-inset-bottom)] xl:hidden">
@@ -36,7 +35,6 @@ function BarraInferior({ itens, rotulo }: { itens: Item[]; rotulo: string }) {
   );
 }
 
-/** Menu lateral do desktop, a partir de 1280 px (componentes "Menu lateral (Dono)" e "(Cliente)", 264 px). No tablet fica a barra inferior. */
 function MenuLateral({ itens, rotulo }: { itens: Item[]; rotulo: string }) {
   const { usuario, sair } = useAuth();
   return (

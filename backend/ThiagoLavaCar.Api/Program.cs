@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using ThiagoLavaCar.Api.Extensions;
 using ThiagoLavaCar.Application;
@@ -53,7 +52,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHealthChecks("/health", new HealthCheckOptions()).AllowAnonymous();
+app.MapHealthChecks("/health").AllowAnonymous();
 
 await app.RunAsync();
 

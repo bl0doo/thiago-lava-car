@@ -15,7 +15,7 @@ namespace ThiagoLavaCar.Application.Services;
 public sealed record PontoEquilibrio(
     decimal Despesas, decimal Diarias, decimal Contas, decimal? MargemPorCarro, bool MargemEstimada, int? CarrosNecessarios, int CarrosFeitos, int? Faltam);
 
-/// <summary>Ponto de equilíbrio do mês (Entrega 2, regras de cálculo), compartilhado pelo painel e pelo relatório.</summary>
+/// <summary>Ponto de equilíbrio do mês, compartilhado pelo painel e pelo relatório.</summary>
 public sealed class PontoEquilibrioCalculador(
     IRelatorioRepository relatorio,
     IServicoRepository servicos,
@@ -42,12 +42,12 @@ public sealed class PontoEquilibrioCalculador(
             margem = historico.Average(o => o.Liquido) - historico.Average(o => o.Insumos);
         }
 
-        if (margem is not > 0)
+        var margemArredondada = margem is { } valor ? Dinheiro.Arredondar(valor) : 0m;
+        if (margemArredondada <= 0)
         {
             return new PontoEquilibrio(despesas, diarias, contas, null, estimada, null, feitas, null);
         }
 
-        var margemArredondada = Dinheiro.Arredondar(margem.Value);
         var necessarios = (int)Math.Ceiling(contas / margemArredondada);
         return new PontoEquilibrio(despesas, diarias, contas, margemArredondada, estimada, necessarios, feitas, Math.Max(0, necessarios - feitas));
     }

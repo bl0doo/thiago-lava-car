@@ -8,6 +8,7 @@ import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Alerta } from '@/components/ui/Alerta';
 import { Button, classesBotao } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { Placa } from '@/components/ui/Placa';
@@ -40,7 +41,6 @@ function Cartao({ a, onCancelar }: { a: Agendamento; onCancelar: () => void }) {
   );
 }
 
-/** Meus agendamentos (cliente): próximos primeiro, depois os passados, com cancelamento enquanto está agendado. */
 export function MeusAgendamentos() {
   const qc = useQueryClient();
   const query = useQuery({ queryKey: ['meus-agendamentos'], queryFn: listarMeusAgendamentos });
@@ -70,12 +70,7 @@ export function MeusAgendamentos() {
         {erro ? <Alerta>{erro}</Alerta> : null}
         {query.isPending ? <Carregando /> : null}
         {query.isError ? (
-          <div className="flex flex-col gap-sm">
-            <Alerta>{interpretarErro(query.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void query.refetch()}>
-              Tentar de novo
-            </Button>
-          </div>
+          <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
         ) : null}
         {query.isSuccess && itens.length === 0 ? (
           <EstadoVazio Icone={CalendarDays} titulo="Você ainda não tem horários">

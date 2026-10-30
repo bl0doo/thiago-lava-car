@@ -1,12 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { CarFront, Flag } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { interpretarErro } from '@/api/erros';
 import { obterFicha, type Ficha } from '@/api/veiculos';
 import { BarraTitulo } from '@/components/layout/BarraTitulo';
-import { Alerta } from '@/components/ui/Alerta';
-import { Button } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { Placa } from '@/components/ui/Placa';
 import { formatarDataCurta, formatarMinutos, formatarMoeda } from '@/lib/format';
@@ -26,12 +24,7 @@ export function FichaDoCarro() {
       <div className="mx-auto flex w-full max-w-[40rem] flex-col gap-md px-md">
         {consulta.isPending ? <Carregando texto="Carregando a ficha…" cartoes={3} /> : null}
         {consulta.isError ? (
-          <>
-            <Alerta>{interpretarErro(consulta.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void consulta.refetch()}>
-              Tentar de novo
-            </Button>
-          </>
+          <ErroConsulta erro={consulta.error} aoTentarNovamente={consulta.refetch} />
         ) : null}
         {consulta.data ? <Conteudo ficha={consulta.data} /> : null}
       </div>
@@ -71,7 +64,7 @@ function Conteudo({ ficha }: { ficha: Ficha }) {
                 <p className="flex items-center gap-xs texto-corpo-p text-secundario">
                   <Flag aria-hidden="true" className="size-4" />
                   {v.status === 'Concluido' ? 'Concluído' : v.status}
-                  {v.duracaoRealMin !== null ? ` · ${formatarMinutos(v.duracaoRealMin)}` : ''} · {formatarMoeda(v.valorTotal)}
+                  {v.duracaoRealMin != null ? ` · ${formatarMinutos(v.duracaoRealMin)}` : ''} · {formatarMoeda(v.valorTotal)}
                 </p>
               </div>
             </li>

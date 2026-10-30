@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { Flag, Plus, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { interpretarErro } from '@/api/erros';
 import { obterPainelHoje, type PainelHoje } from '@/api/painel';
 import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Alerta } from '@/components/ui/Alerta';
-import { Button, classesBotao } from '@/components/ui/Button';
+import { classesBotao } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { formatarData, formatarMoeda } from '@/lib/format';
 
 function NumeroChave({ rotulo, valor, destaque, detalhe }: { rotulo: string; valor: string; destaque?: boolean; detalhe?: string }) {
@@ -19,7 +19,6 @@ function NumeroChave({ rotulo, valor, destaque, detalhe }: { rotulo: string; val
   );
 }
 
-/** Painel (tela 03): os dois números do dia e quantos carros faltam para pagar as contas, sem metáfora, de propósito. */
 export function Painel() {
   const consulta = useQuery({ queryKey: ['painel', 'hoje'], queryFn: obterPainelHoje, refetchOnWindowFocus: true });
 
@@ -29,12 +28,7 @@ export function Painel() {
       <div className="flex flex-col gap-md px-md">
         {consulta.isPending ? <Carregando texto="Carregando o painel…" cartoes={3} /> : null}
         {consulta.isError ? (
-          <>
-            <Alerta>{interpretarErro(consulta.error).mensagem}</Alerta>
-            <Button variante="contorno" onClick={() => void consulta.refetch()}>
-              Tentar de novo
-            </Button>
-          </>
+          <ErroConsulta erro={consulta.error} aoTentarNovamente={consulta.refetch} />
         ) : null}
         {consulta.data ? <Conteudo p={consulta.data} /> : null}
         <div className="grid gap-xs sm:grid-cols-3">

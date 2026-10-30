@@ -13,7 +13,6 @@ import { Carregando } from '@/components/ui/Carregando';
 import { Select } from '@/components/ui/Select';
 import { meusDadosSchema, type MeusDadosEntrada, type MeusDadosSaida } from '@/schemas/meusDados';
 
-/** Meus dados (cliente): ver e corrigir os próprios dados, como a LGPD pede. */
 export function MeusDados() {
   const { sair } = useAuth();
   const qc = useQueryClient();

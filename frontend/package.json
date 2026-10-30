@@ -16,7 +16,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "e2e:integracao": "playwright test -c playwright.integracao.config.ts",
-    "api:types": "openapi-typescript ../docs/api/openapi-v1.json -o src/api/schema.d.ts"
+    "api:types": "openapi-typescript ../docs/api/openapi-v1.json -o src/api/schema.d.ts",
+    "api:types:check": "npm run api:types -- --check"
   },
   "dependencies": {
     "@fontsource/barlow": "^5.3.0",

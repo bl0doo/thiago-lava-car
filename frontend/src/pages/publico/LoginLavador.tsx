@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
 import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { TecladoPin } from '@/components/ui/TecladoPin';
-import { pinSchema } from '@/schemas/login';
+import { pinSchema } from '@/schemas/comuns';
 
 export function LoginLavador() {
   const { usuario, entrarComPin } = useAuth();

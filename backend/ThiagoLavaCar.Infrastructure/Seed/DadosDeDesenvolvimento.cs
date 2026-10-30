@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ThiagoLavaCar.Application.Abstractions;
+using ThiagoLavaCar.Application.Common;
 using ThiagoLavaCar.Domain.Entities;
 using ThiagoLavaCar.Domain.Enums;
 using ThiagoLavaCar.Infrastructure.Data;
@@ -61,12 +62,12 @@ public sealed class DadosDeDesenvolvimento(
             ModeloVeiculo.Criar("Toyota", "Hilux", TipoVeiculo.Caminhonete),
             ModeloVeiculo.Criar("Honda", "CG 160", TipoVeiculo.Moto));
 
-        var renata =Cliente.Criar("Renata Souza", "44999998888", null, CanalContato.WhatsApp, true, agora);
+        var renata = Cliente.Criar("Renata Souza", "44999998888", null, CanalContato.WhatsApp, true, agora);
         db.Clientes.Add(renata);
         await db.SaveChangesAsync(ct);
 
         // Diária do dia de cada lavador, pelo valor padrão da configuração (R$ 100 na semana, R$ 120 aos sábados).
-        var hoje = DateOnly.FromDateTime(agora.UtcDateTime);
+        var hoje = FusoBrasilia.DataDe(agora);
         var padrao = Configuracao.Padrao("Thiago Lava Car");
         db.Diarias.AddRange(
             Diaria.Criar(diego.Id, hoje, padrao.DiariaSugerida(hoje)),

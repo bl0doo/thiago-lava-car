@@ -95,7 +95,7 @@ public sealed class ClienteService(
     private static VeiculoResumoResponse Mapear(Veiculo v) => new(v.Id, v.Placa, v.ModeloDescricao, v.Tipo.ToString(), v.Cor);
 }
 
-/// <summary>Convenção de listas: pagina padrão 1, tamanho padrão 20 e máximo 100 (Entrega 2, seção 3).</summary>
+/// <summary>Convenção de listas: página padrão 1, tamanho padrão 20 e máximo 100.</summary>
 public static class Paginacao
 {
     public static (int Pagina, int Tamanho) Normalizar(int pagina, int tamanho) =>

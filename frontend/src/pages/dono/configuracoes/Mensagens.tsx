@@ -6,6 +6,7 @@ import { Alerta } from '@/components/ui/Alerta';
 import { AreaTexto } from '@/components/ui/AreaTexto';
 import { Button } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
+import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { modeloSchema } from '@/schemas/configuracao';
 
 const TITULO: Record<string, string> = { 'lavagem-iniciada': 'Lavagem iniciada', 'lavagem-concluida': 'Lavagem concluída' };
@@ -58,12 +59,7 @@ export function Mensagens() {
   if (query.isPending) return <Carregando />;
   if (query.isError) {
     return (
-      <div className="flex flex-col gap-sm">
-        <Alerta>{interpretarErro(query.error).mensagem}</Alerta>
-        <Button variante="contorno" onClick={() => void query.refetch()}>
-          Tentar de novo
-        </Button>
-      </div>
+      <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
     );
   }
   return (

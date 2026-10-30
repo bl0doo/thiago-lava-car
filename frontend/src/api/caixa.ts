@@ -1,32 +1,11 @@
 import { api } from './client';
+import type { Schemas } from './tipos';
 
-export type CaixaForma = { forma: string; quantidade: number; bruto: number; taxas: number; liquido: number };
+export type CaixaResumo = Schemas['CaixaResumoResponse'];
 
-export type CaixaResumo = {
-  data: string;
-  fechado: boolean;
-  porForma: CaixaForma[];
-  totalBruto: number;
-  totalLiquido: number;
-  despesas: number;
-  diarias: number;
-  osConcluidasSemPagamento: number;
-};
+export type Fechamento = Schemas['FechamentoResponse'];
 
-export type FechamentoForma = { forma: string; calculado: number; conferido: number };
-
-export type Fechamento = {
-  data: string;
-  totalBruto: number;
-  totalLiquido: number;
-  totalConferido: number;
-  diferenca: number;
-  justificativa: string | null;
-  formas: FechamentoForma[];
-  fechadoEm: string;
-};
-
-export type ValorConferido = { forma: string; valor: number };
+export type ValorConferido = Schemas['ValorConferidoDto'];
 
 /** GET /caixa/{data}/resumo: pagamentos não estornados do dia, para conferir com o dinheiro e a maquininha. */
 export async function obterResumoCaixa(data: string): Promise<CaixaResumo> {

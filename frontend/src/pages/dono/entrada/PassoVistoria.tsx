@@ -11,7 +11,6 @@ import { LOCAIS_AVARIA, TIPOS_AVARIA, vistoriaSchema, type VistoriaEntrada, type
 
 type Props = { enviando: boolean; erro: string | null; onVoltar: () => void; onConcluir: (v: VistoriaSaida) => void };
 
-/** Passo 3: vistoria de entrada (avarias, pertences, quem retira) e aceite do cliente. */
 export function PassoVistoria({ enviando, erro, onVoltar, onConcluir }: Props) {
   const {
     register,

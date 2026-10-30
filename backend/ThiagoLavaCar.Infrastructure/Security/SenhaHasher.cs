@@ -4,7 +4,7 @@ using ThiagoLavaCar.Application.Abstractions;
 
 namespace ThiagoLavaCar.Infrastructure.Security;
 
-/// <summary>PBKDF2 com sal pelo PasswordHasher do ASP.NET Core Identity, 100 mil iterações (Entrega 2, seção 4).</summary>
+/// <summary>PBKDF2 com sal pelo PasswordHasher do ASP.NET Core Identity, 100 mil iterações.</summary>
 internal sealed class SenhaHasher : ISenhaHasher
 {
     private readonly PasswordHasher<string> _hasher = new(Options.Create(new PasswordHasherOptions { IterationCount = 100_000 }));

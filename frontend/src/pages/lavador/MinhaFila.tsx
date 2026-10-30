@@ -31,7 +31,6 @@ function AvisoDesfazer({ cartao, onAcao, pendente }: { cartao: Cartao } & AcaoPr
   );
 }
 
-/** Tela 07 do protótipo: o carro no box com o cronômetro grande e o botão Encerrar de 72 px. */
 function NoBox({ cartao, agora, onAcao, pendente }: { cartao: Cartao; agora: number } & AcaoProps) {
   const decorrido = cartao.inicioEm ? agora - new Date(cartao.inicioEm).getTime() : 0;
   return (
@@ -63,7 +62,6 @@ function NoBox({ cartao, agora, onAcao, pendente }: { cartao: Cartao; agora: num
   );
 }
 
-/** Fila do lavador (telas 06 e 07): o carro no box primeiro, depois o próximo com Iniciar e o resto da fila. */
 export function MinhaFila() {
   const { usuario, sair } = useAuth();
   const { quadro, carregando, erroConsulta, erroAcao, executar, cartaoPendente, atualizar, atualizando } = useQuadro();
