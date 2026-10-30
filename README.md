@@ -1,6 +1,6 @@
 # Thiago Lava Car
 
-![CI Status](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)
+![CI Status](https://github.com/bl0doo/thiago-lava-car/actions/workflows/ci.yml/badge.svg)
 ![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8?logo=tailwindcss&logoColor=white)

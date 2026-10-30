@@ -13,3 +13,4 @@
 - [ ] O código segue as convenções e estilo do projeto.
 - [ ] Foi executado o linter e testes localmente (`npm run lint`, `npm test`, `dotnet test`).
 - [ ] Se aplicável, a documentação ou contrato da API (`openapi-v1.json`) foi atualizado.
+
