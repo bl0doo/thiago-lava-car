@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { interpretarErro } from '@/api/erros';
-import { rotaInicial, useAuth } from '@/auth/AuthContext';
+import { destinoAposLogin, rotaInicial, useAuth } from '@/auth/AuthContext';
 import { Marca } from '@/components/layout/Marca';
 import { Alerta } from '@/components/ui/Alerta';
 import { Button, classesBotao } from '@/components/ui/Button';
@@ -29,7 +29,7 @@ export function Login() {
     setErroGeral(null);
     try {
       const logado = await entrar(email, senha);
-      void navegar(local.state?.de ?? rotaInicial(logado.perfil), { replace: true });
+      void navegar(destinoAposLogin(logado.perfil, local.state?.de), { replace: true });
     } catch (e) {
       const erro = interpretarErro(e);
       // 422: a API aponta o campo; 401, 423 e 429: mensagem geral no topo do formulário

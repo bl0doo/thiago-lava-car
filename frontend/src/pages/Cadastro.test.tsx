@@ -96,4 +96,9 @@ describe('Cadastro do cliente', () => {
     expect(await screen.findByText(/Telefone inválido/)).toBeInTheDocument();
     expect(screen.getByLabelText('Celular com DDD')).toHaveAttribute('aria-invalid', 'true');
   });
+
+  it('tem um caminho de volta ao login logo no topo da tela', () => {
+    renderizar();
+    expect(screen.getByRole('link', { name: 'Voltar ao login' })).toHaveAttribute('href', '/login');
+  });
 });

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import type { Agendamento } from '@/api/agendamentos';
 import { erroHttp } from '@/test/fabrica';
-import { MeusAgendamentos } from './cliente/MeusAgendamentos';
+import { ListaAgendamentos } from './cliente/ListaAgendamentos';
 
 const api = vi.hoisted(() => ({ listarMeusAgendamentos: vi.fn(), cancelarAgendamento: vi.fn() }));
 vi.mock('@/api/agendamentos', () => api);
@@ -24,17 +24,17 @@ const agendamento = (parcial: Partial<Agendamento> = {}): Agendamento => ({
   ...parcial,
 });
 
-function renderizar() {
-  render(
+function renderizar(mostrar: 'proximos' | 'anteriores' = 'proximos') {
+  return render(
     <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
       <MemoryRouter>
-        <MeusAgendamentos />
+        <ListaAgendamentos mostrar={mostrar} />
       </MemoryRouter>
     </QueryClientProvider>,
   );
 }
 
-describe('Meus agendamentos (cliente)', () => {
+describe('Lista de agendamentos (cliente)', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     api.listarMeusAgendamentos.mockResolvedValue([
@@ -44,7 +44,7 @@ describe('Meus agendamentos (cliente)', () => {
     ]);
   });
 
-  it('separa próximos (do mais perto para o mais longe) dos anteriores', async () => {
+  it('lista os próximos do mais perto para o mais longe, sem os anteriores', async () => {
     renderizar();
 
     const proximos = await screen.findByRole('region', { name: 'Próximos' });
@@ -52,7 +52,13 @@ describe('Meus agendamentos (cliente)', () => {
     expect(itens).toHaveLength(2);
     expect(within(itens[0]!).getByText(/30\/10/)).toBeInTheDocument();
     expect(within(itens[1]!).getByText(/02\/11/)).toBeInTheDocument();
-    const anteriores = screen.getByRole('region', { name: 'Anteriores' });
+    expect(screen.queryByText('Atendido')).not.toBeInTheDocument();
+  });
+
+  it('mostra os anteriores sem botão de cancelar', async () => {
+    renderizar('anteriores');
+
+    const anteriores = await screen.findByRole('region', { name: 'Anteriores' });
     expect(within(anteriores).getByText('Atendido')).toBeInTheDocument();
     expect(within(anteriores).queryByRole('button')).not.toBeInTheDocument();
   });
@@ -81,22 +87,31 @@ describe('Meus agendamentos (cliente)', () => {
     expect(await screen.findByText('Agendamento já atendido.')).toBeInTheDocument();
   });
 
-  it('sem horários, convida a agendar', async () => {
+  it('sem próximos, não mostra nada', async () => {
     api.listarMeusAgendamentos.mockResolvedValue([]);
 
-    renderizar();
+    const { container } = renderizar();
 
-    expect(await screen.findByText('Você ainda não tem horários')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Agendar um horário' })).toHaveAttribute('href', '/cliente/agendar');
+    await waitFor(() => expect(api.listarMeusAgendamentos).toHaveBeenCalled());
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+    expect(container).not.toHaveTextContent('horários');
   });
 
-  it('deixa tentar de novo quando a lista não carrega', async () => {
-    api.listarMeusAgendamentos.mockRejectedValueOnce(erroHttp(500, { detail: 'Falha.' })).mockResolvedValue([agendamento()]);
+  it('sem histórico, explica que está vazio', async () => {
+    api.listarMeusAgendamentos.mockResolvedValue([]);
 
-    renderizar();
+    renderizar('anteriores');
+
+    expect(await screen.findByText('Nenhum atendimento ainda')).toBeInTheDocument();
+  });
+
+  it('deixa tentar de novo quando o histórico não carrega', async () => {
+    api.listarMeusAgendamentos.mockRejectedValueOnce(erroHttp(500, { detail: 'Falha.' })).mockResolvedValue([agendamento({ status: 'Atendido' })]);
+
+    renderizar('anteriores');
     expect(await screen.findByText('Falha.')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Tentar de novo' }));
 
-    expect(await screen.findByRole('region', { name: 'Próximos' })).toBeInTheDocument();
+    expect(await screen.findByRole('region', { name: 'Anteriores' })).toBeInTheDocument();
   });
 });

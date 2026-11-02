@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { atualizarMeusDados, obterMeusDados } from '@/api/clientes';
 import { interpretarErro } from '@/api/erros';
 import { useAuth } from '@/auth/AuthContext';
-import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Alerta } from '@/components/ui/Alerta';
 import { Button } from '@/components/ui/Button';
 import { Campo } from '@/components/ui/Campo';
@@ -53,7 +52,6 @@ export function MeusDados() {
 
   return (
     <section className="flex flex-col">
-      <BarraTitulo sobretitulo="Perfil" titulo="Meus dados" />
       <div className="mx-auto flex w-full max-w-[40rem] flex-col gap-md px-md">
         {consulta.isPending ? <Carregando texto="Carregando seus dados…" cartoes={2} /> : null}
         {consulta.isError ? <Alerta>{interpretarErro(consulta.error).mensagem}</Alerta> : null}

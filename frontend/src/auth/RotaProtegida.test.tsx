@@ -13,6 +13,7 @@ function renderizarEm(caminho: string) {
       { path: '/login/lavador', element: <p>tela de login do lavador</p> },
       { path: '/sem-permissao', element: <p>sem permissão</p> },
       { element: <RotaProtegida perfis={['Dono']} />, children: [{ path: '/dono', element: <p>área do dono</p> }] },
+      { element: <RotaProtegida perfis={['Cliente']} />, children: [{ path: '/cliente/agendar', element: <p>área do cliente</p> }] },
       { element: <RotaProtegida perfis={['Lavador']} />, children: [{ path: '/lavador', element: <p>área do lavador</p> }] },
     ],
     { initialEntries: [caminho] },
@@ -28,6 +29,13 @@ describe('RotaProtegida', () => {
     logadoComo('Dono');
     renderizarEm('/dono');
     expect(screen.getByText('área do dono')).toBeInTheDocument();
+  });
+
+  it('mostra a área do cliente para o Cliente, sem "Sem permissão"', () => {
+    logadoComo('Cliente');
+    renderizarEm('/cliente/agendar');
+    expect(screen.getByText('área do cliente')).toBeInTheDocument();
+    expect(screen.queryByText('sem permissão')).not.toBeInTheDocument();
   });
 
   it('manda o Lavador que digita /dono para "Sem permissão"', () => {

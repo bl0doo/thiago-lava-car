@@ -62,3 +62,9 @@ export function rotaInicial(perfil: Perfil): string {
       return '/cliente/agendar';
   }
 }
+
+/** Rota para onde ir depois do login: a de origem só vale se estiver na área do perfil (evita cair em /sem-permissao). */
+export function destinoAposLogin(perfil: Perfil, de?: string): string {
+  const area = `/${rotaInicial(perfil).split('/')[1]}`;
+  return de && (de === area || de.startsWith(`${area}/`)) ? de : rotaInicial(perfil);
+}

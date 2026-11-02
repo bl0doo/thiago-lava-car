@@ -1,4 +1,4 @@
-import { CalendarDays, CarFront, Flag, LayoutDashboard, LogOut, Menu, User, Wallet, CalendarCheck, type LucideIcon } from 'lucide-react';
+import { CalendarDays, Flag, LayoutDashboard, LogOut, Menu, User, Wallet, type LucideIcon } from 'lucide-react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/auth/AuthContext';
 import { Marca } from './Marca';
@@ -80,9 +80,7 @@ const ITENS_DONO: Item[] = [
 
 const ITENS_CLIENTE: Item[] = [
   { para: '/cliente/agendar', rotulo: 'Agendar', Icone: CalendarDays },
-  { para: '/cliente/agendamentos', rotulo: 'Meus horários', Icone: CalendarCheck },
-  { para: '/cliente/veiculos', rotulo: 'Veículos', Icone: CarFront },
-  { para: '/cliente/perfil', rotulo: 'Perfil', Icone: User },
+  { para: '/cliente/conta', rotulo: 'Minha conta', Icone: User },
 ];
 
 function Moldura({ itens, rotuloNav }: { itens?: Item[]; rotuloNav?: string }) {

@@ -1,12 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { CalendarDays } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { cancelarAgendamento, listarMeusAgendamentos, type Agendamento } from '@/api/agendamentos';
 import { interpretarErro } from '@/api/erros';
-import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Alerta } from '@/components/ui/Alerta';
-import { Button, classesBotao } from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { Carregando } from '@/components/ui/Carregando';
 import { ErroConsulta } from '@/components/ui/ErroConsulta';
 import { Dialogo } from '@/components/ui/Dialogo';
@@ -41,7 +39,11 @@ function Cartao({ a, onCancelar }: { a: Agendamento; onCancelar: () => void }) {
   );
 }
 
-export function MeusAgendamentos() {
+/**
+ * Horários do cliente. `proximos` fica discreto (some se não houver nenhum) para caber no topo de Agendar;
+ * `anteriores` é o histórico da aba Minha conta.
+ */
+export function ListaAgendamentos({ mostrar }: { mostrar: 'proximos' | 'anteriores' }) {
   const qc = useQueryClient();
   const query = useQuery({ queryKey: ['meus-agendamentos'], queryFn: listarMeusAgendamentos });
   const [cancelando, setCancelando] = useState<Agendamento | null>(null);
@@ -60,56 +62,36 @@ export function MeusAgendamentos() {
   });
 
   const itens = query.data ?? [];
-  const proximos = itens.filter((a) => a.status === 'Agendado').sort((x, y) => x.inicio.localeCompare(y.inicio));
-  const anteriores = itens.filter((a) => a.status !== 'Agendado');
+  const lista =
+    mostrar === 'proximos'
+      ? itens.filter((a) => a.status === 'Agendado').sort((x, y) => x.inicio.localeCompare(y.inicio))
+      : itens.filter((a) => a.status !== 'Agendado');
+  const historico = mostrar === 'anteriores';
+  const titulo = historico ? 'Anteriores' : 'Próximos';
 
   return (
-    <div className="mx-auto flex max-w-[40rem] flex-col">
-      <BarraTitulo sobretitulo="Cliente" titulo="Meus horários" />
-      <div className="flex flex-col gap-md px-md pb-lg">
-        {erro ? <Alerta>{erro}</Alerta> : null}
-        {query.isPending ? <Carregando /> : null}
-        {query.isError ? (
-          <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} />
-        ) : null}
-        {query.isSuccess && itens.length === 0 ? (
-          <EstadoVazio Icone={CalendarDays} titulo="Você ainda não tem horários">
-            Escolha o dia e o serviço e reserve sem fila.
-          </EstadoVazio>
-        ) : null}
+    <div className="flex flex-col gap-md">
+      {erro ? <Alerta>{erro}</Alerta> : null}
+      {historico && query.isPending ? <Carregando /> : null}
+      {historico && query.isError ? <ErroConsulta erro={query.error} aoTentarNovamente={query.refetch} /> : null}
+      {historico && query.isSuccess && lista.length === 0 ? (
+        <EstadoVazio Icone={CalendarDays} titulo="Nenhum atendimento ainda">
+          Os horários concluídos ou cancelados aparecem aqui.
+        </EstadoVazio>
+      ) : null}
 
-        {proximos.length > 0 ? (
-          <section aria-labelledby="proximos" className="flex flex-col gap-sm">
-            <h2 id="proximos" className="texto-eyebrow text-secundario">
-              Próximos
-            </h2>
-            <ul className="flex flex-col gap-md">
-              {proximos.map((a) => (
-                <Cartao key={a.id} a={a} onCancelar={() => setCancelando(a)} />
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {anteriores.length > 0 ? (
-          <section aria-labelledby="anteriores" className="flex flex-col gap-sm">
-            <h2 id="anteriores" className="texto-eyebrow text-secundario">
-              Anteriores
-            </h2>
-            <ul className="flex flex-col gap-md">
-              {anteriores.map((a) => (
-                <Cartao key={a.id} a={a} onCancelar={() => setCancelando(a)} />
-              ))}
-            </ul>
-          </section>
-        ) : null}
-
-        {query.isSuccess ? (
-          <Link to="/cliente/agendar" className={`${classesBotao('primario')} w-full`}>
-            Agendar um horário
-          </Link>
-        ) : null}
-      </div>
+      {lista.length > 0 ? (
+        <section aria-labelledby={`lista-${mostrar}`} className="flex flex-col gap-sm">
+          <h2 id={`lista-${mostrar}`} className="texto-eyebrow text-secundario">
+            {titulo}
+          </h2>
+          <ul className="flex flex-col gap-md">
+            {lista.map((a) => (
+              <Cartao key={a.id} a={a} onCancelar={() => setCancelando(a)} />
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <Dialogo
         aberto={cancelando !== null}
