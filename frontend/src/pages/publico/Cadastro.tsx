@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -54,7 +55,11 @@ export function Cadastro() {
   return (
     <main className="flex min-h-dvh flex-col bg-app">
       <header className="flex flex-col bg-inverso">
-        <div className="mx-auto w-full max-w-[28rem] px-lg pt-xl pb-lg">
+        <div className="mx-auto flex w-full max-w-[28rem] flex-col gap-md px-lg pt-md pb-lg">
+          <Link to="/login" className="-ml-xs flex min-h-alvo w-fit items-center gap-2xs rounded-md px-xs texto-rotulo-m text-texto-inverso hover:bg-[var(--asfalto-800)]">
+            <ChevronLeft aria-hidden="true" className="size-6" strokeWidth={2.5} />
+            Voltar ao login
+          </Link>
           <Marca />
         </div>
         <div aria-hidden="true" className="faixa-quadriculada" />
