@@ -5,19 +5,20 @@ import { erroHttp } from '@/test/fabrica';
 import { Login } from './publico/Login';
 
 const auth = vi.hoisted(() => ({ entrar: vi.fn(), usuario: null as unknown }));
-vi.mock('@/auth/AuthContext', () => ({
+vi.mock('@/auth/AuthContext', async (original) => ({
+  ...(await original<Record<string, unknown>>()),
   useAuth: () => ({ status: 'anonimo', usuario: auth.usuario, entrar: auth.entrar }),
-  rotaInicial: (perfil: string) => (perfil === 'Dono' ? '/dono' : '/outro'),
 }));
 
-function renderizar() {
+function renderizar(de?: string) {
   const router = createMemoryRouter(
     [
       { path: '/login', element: <Login /> },
       { path: '/dono', element: <p>painel do dono</p> },
+      { path: '/cliente/agendar', element: <p>agenda do cliente</p> },
       { path: '/login/lavador', element: <p>login lavador</p> },
     ],
-    { initialEntries: ['/login'] },
+    { initialEntries: [{ pathname: '/login', state: de ? { de } : undefined }] },
   );
   render(<RouterProvider router={router} />);
 }
@@ -49,6 +50,18 @@ describe('Login', () => {
 
     expect(await screen.findByText('painel do dono')).toBeInTheDocument();
     expect(auth.entrar).toHaveBeenCalledWith('thiago@lavacar.com', 'Senha123');
+  });
+
+  it('ignora a rota de origem que pertence à área de outro perfil', async () => {
+    const usuario = userEvent.setup();
+    auth.entrar.mockResolvedValue({ id: 2, nome: 'Renata', perfil: 'Cliente' });
+    renderizar('/dono');
+
+    await usuario.type(screen.getByLabelText('E-mail'), 'renata@email.com');
+    await usuario.type(screen.getByLabelText('Senha'), 'Senha123');
+    await usuario.click(screen.getByRole('button', { name: 'Entrar' }));
+
+    expect(await screen.findByText('agenda do cliente')).toBeInTheDocument();
   });
 
   it.each([
