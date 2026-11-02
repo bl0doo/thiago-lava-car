@@ -65,20 +65,22 @@ public sealed class AgendamentoService(
         }
 
         var agora = relogio.GetUtcNow();
-        var data = FusoBrasilia.DataDe(request.Inicio);
+        // O cliente manda o horário com o offset de Brasília (-03:00), mas o banco (timestamptz) só aceita offset 0.
+        var inicio = request.Inicio.ToUniversalTime();
+        var data = FusoBrasilia.DataDe(inicio);
         ValidarJanela(data, agora);
         var servico = await ObterServicoAtivoAsync(request.ServicoId, ct);
         _ = servico.ObterPreco(veiculo.Tipo, request.ComCera);
         var configuracao = await ObterConfiguracaoAsync(ct);
         GarantirDiaAberto(configuracao, data);
 
-        if (!AgendaCalculo.Grade(configuracao, servico.TempoEstimadoMin).Contains(FusoBrasilia.HoraDe(request.Inicio))
-            || request.Inicio.Second != 0 || request.Inicio.Millisecond != 0)
+        if (!AgendaCalculo.Grade(configuracao, servico.TempoEstimadoMin).Contains(FusoBrasilia.HoraDe(inicio))
+            || inicio.Second != 0 || inicio.Millisecond != 0)
         {
             throw new RegraInvalidaException("Esse horário está fora do funcionamento ou não cabe a duração do serviço antes de fechar.");
         }
 
-        if (request.Inicio < agora + AgendaCalculo.AntecedenciaMinima)
+        if (inicio < agora + AgendaCalculo.AntecedenciaMinima)
         {
             throw new RegraInvalidaException("Agende com pelo menos 1 hora de antecedência.");
         }
@@ -95,12 +97,12 @@ public sealed class AgendamentoService(
         var criado = await agendamentos.ExecutarSerializadoAsync(async () =>
         {
             var ocupacao = await agendamentos.ListarOcupacaoAsync(dia, fimDoDia, ct);
-            if (AgendaCalculo.Sobrepostos(ocupacao, request.Inicio, servico.TempoEstimadoMin) >= lavadores)
+            if (AgendaCalculo.Sobrepostos(ocupacao, inicio, servico.TempoEstimadoMin) >= lavadores)
             {
                 throw new ConflitoException("Este horário acabou de ser ocupado.");
             }
 
-            var agendamento = Agendamento.Criar(veiculo.ClienteId, veiculo.Id, servico, veiculo.Tipo, request.ComCera, request.Inicio, agora);
+            var agendamento = Agendamento.Criar(veiculo.ClienteId, veiculo.Id, servico, veiculo.Tipo, request.ComCera, inicio, agora);
             await agendamentos.AdicionarAsync(agendamento, ct);
             await unitOfWork.SalvarAsync(ct);
             return agendamento;
