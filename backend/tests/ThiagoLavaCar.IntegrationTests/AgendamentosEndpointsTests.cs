@@ -109,6 +109,25 @@ public sealed class AgendamentosEndpointsTests(ApiFactory fabrica)
     }
 
     [Fact]
+    public async Task Agendar_com_offset_de_brasilia_no_horario_cria_o_agendamento()
+    {
+        await fabrica.CriarLavadorAsync();
+        var servicoId = await ServicoAsync();
+        var usuario = await fabrica.CriarClienteComLoginAsync();
+        using var http = await fabrica.AutenticadoAsync(usuario.Email!);
+        var veiculoId = await VeiculoDoClienteAsync(usuario.Id);
+        var dia = DiaAberto(4);
+
+        // Mesmo formato que o frontend envia: hora local com -03:00.
+        var pedido = new { veiculoId, servicoId, comCera = true, inicio = $"{dia:yyyy-MM-dd}T09:00:00-03:00" };
+        var resposta = await http.PostAsJsonAsync(Url(), pedido);
+
+        Assert.Equal(HttpStatusCode.Created, resposta.StatusCode);
+        var corpo = await resposta.LerJsonAsync();
+        Assert.Equal(As(dia, 9), corpo.GetProperty("inicio").GetDateTimeOffset());
+    }
+
+    [Fact]
     public async Task Horario_fora_da_grade_ou_do_funcionamento_devolve_422_e_veiculo_de_outro_cliente_404()
     {
         await fabrica.CriarLavadorAsync();
