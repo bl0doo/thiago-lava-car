@@ -66,11 +66,14 @@ export const rotas: RouteObject[] = [
         path: '/cliente',
         element: <ShellCliente />,
         children: [
+          { index: true, element: <Navigate to="agendar" replace /> },
           { path: 'agendar', lazy: async () => ({ Component: (await import('@/pages/cliente/Agendar')).Agendar }) },
-          { path: 'agendamentos', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusAgendamentos')).MeusAgendamentos }) },
-          { path: 'veiculos', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusVeiculos')).MeusVeiculos }) },
+          { path: 'conta', lazy: async () => ({ Component: (await import('@/pages/cliente/MinhaConta')).MinhaConta }) },
           { path: 'veiculos/:id', lazy: async () => ({ Component: (await import('@/pages/FichaDoCarro')).FichaDoCarro }) },
-          { path: 'perfil', lazy: async () => ({ Component: (await import('@/pages/cliente/MeusDados')).MeusDados }) },
+          // endereços antigos (links salvos) das telas que foram para Minha conta
+          { path: 'agendamentos', element: <Navigate to="/cliente/conta?aba=historico" replace /> },
+          { path: 'veiculos', element: <Navigate to="/cliente/conta?aba=veiculos" replace /> },
+          { path: 'perfil', element: <Navigate to="/cliente/conta?aba=dados" replace /> },
         ],
       },
     ],

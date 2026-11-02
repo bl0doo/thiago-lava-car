@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CarFront, CircleCheck } from 'lucide-react';
+import { CircleCheck, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { criarAgendamento, listarHorarios } from '@/api/agendamentos';
 import { listarMeusVeiculos } from '@/api/clientes';
 import { interpretarErro } from '@/api/erros';
 import { listarServicos } from '@/api/servicos';
 import { BarraTitulo } from '@/components/layout/BarraTitulo';
 import { Alerta } from '@/components/ui/Alerta';
-import { Button, classesBotao } from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { Caixinha } from '@/components/ui/Caixinha';
 import { Campo } from '@/components/ui/Campo';
 import { Carregando } from '@/components/ui/Carregando';
-import { EstadoVazio } from '@/components/ui/EstadoVazio';
 import { Select } from '@/components/ui/Select';
 import { formatarDataIso, formatarMinutos, formatarMoeda, hojeIso } from '@/lib/format';
+import { FormNovoVeiculo } from './FormNovoVeiculo';
+import { ListaAgendamentos } from './ListaAgendamentos';
 
 const DIAS_A_FRENTE = 30;
 
@@ -28,6 +28,7 @@ export function Agendar() {
   const qc = useQueryClient();
   const hoje = hojeIso();
   const [veiculoId, setVeiculoId] = useState('');
+  const [cadastrando, setCadastrando] = useState(false);
   const [servicoId, setServicoId] = useState('');
   const [comCera, setComCera] = useState(false);
   const [data, setData] = useState(hoje);
@@ -79,9 +80,14 @@ export function Agendar() {
               {formatarDataIso(feito.data)} às {feito.hora} · {veiculo?.placa}
             </p>
           </div>
-          <Link to="/cliente/agendamentos" className={`${classesBotao('primario')} w-full`}>
+          <Button
+            onClick={() => {
+              setFeito(null);
+              setHora(null);
+            }}
+          >
             Ver meus horários
-          </Link>
+          </Button>
         </div>
       </div>
     );
@@ -122,13 +128,9 @@ export function Agendar() {
     return (
       <div className="mx-auto flex max-w-[40rem] flex-col">
         <BarraTitulo sobretitulo="Cliente" titulo="Agendar" />
-        <div className="flex flex-col gap-md px-md">
-          <EstadoVazio Icone={CarFront} titulo="Cadastre um veículo primeiro">
-            O horário é reservado para um carro seu.
-          </EstadoVazio>
-          <Link to="/cliente/veiculos" className={`${classesBotao('primario')} w-full`}>
-            Meus veículos
-          </Link>
+        <div className="flex flex-col gap-md px-md pb-lg">
+          <p className="texto-corpo-m text-secundario">Cadastre seu carro para reservar um horário.</p>
+          <FormNovoVeiculo onCriado={(v) => setVeiculoId(String(v.id))} />
         </div>
       </div>
     );
@@ -140,6 +142,7 @@ export function Agendar() {
     <div className="mx-auto flex max-w-[40rem] flex-col">
       <BarraTitulo sobretitulo="Cliente" titulo="Agendar" />
       <div className="flex flex-col gap-md px-md pb-lg">
+        <ListaAgendamentos mostrar="proximos" />
         {erro ? <Alerta>{erro}</Alerta> : null}
 
         <Select
@@ -157,6 +160,22 @@ export function Agendar() {
             </option>
           ))}
         </Select>
+
+        {cadastrando ? (
+          <FormNovoVeiculo
+            onCriado={(v) => {
+              setVeiculoId(String(v.id));
+              setHora(null);
+              setCadastrando(false);
+            }}
+            onCancelar={() => setCadastrando(false)}
+          />
+        ) : (
+          <Button variante="contorno" onClick={() => setCadastrando(true)}>
+            <Plus aria-hidden="true" className="size-5" strokeWidth={2.5} />
+            Cadastrar outro carro
+          </Button>
+        )}
 
         <Select
           rotulo="Serviço"
